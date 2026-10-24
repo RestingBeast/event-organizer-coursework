@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">Event Admin</string>
+    <string name="title">Events</string>
+    <string name="no_event_text">No events yet.\nTap + Add Event to create one.</string>
+    <string name="add_event">Add Event</string>
+    <string name="title_new_event">New event</string>
+    <string name="hint_event_name">Event name</string>
+    <string name="hint_date">Date</string>
+    <string name="hint_location">Location</string>
+    <string name="hint_organizer">Organizer</string>
+    <string name="label_type">Type</string>
+    <string name="button_save">Save event</string>
+    <string-array name="event_types">
+        <item>Conference</item>
+        <item>Workshop</item>
+        <item>Seminar</item>
+        <item>Social</item>
+        <item>Other</item>
+    </string-array>
+    <string name="error_required">This field is required</string>
+    <string name="error_too_long">Maximum %1$d characters</string>
+    <string name="label_status">Status</string>
+    <string-array name="event_statuses">
+        <item>Upcoming</item>
+        <item>Completed</item>
+        <item>Cancelled</item>
+    </string-array>
+    <string name="event_count">%1$d %2$s</string>
+    <string name="single_event">event</string>
+    <string name="multiple_event">events</string>
+    <string name="insert_error">Event Creation Failed!</string>
+    <string name="update_error">Failed to update the event!</string>
+    <string name="title_edit_event">Edit event</string>
+    <string name="meta_string">%1$s · %2$s</string>
+    <string name="button_delete">Delete event</string>
+    <string name="delete_error">Failed to delete the event!</string>
+    <string name="dialog_title">Delete event?</string>
+    <string name="dialog_message">The event will be permanently deleted.</string>
+    <string name="dialog_yes">Delete</string>
+</resources>

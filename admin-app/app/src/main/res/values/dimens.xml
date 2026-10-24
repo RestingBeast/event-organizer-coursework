@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="pill_padding_horizontal">10dp</dimen>
+    <dimen name="pill_padding_vertical">2dp</dimen>
+    <dimen name="page_padding">20dp</dimen>
+    <dimen name="space_extra_small">4dp</dimen>
+    <dimen name="space_small">8dp</dimen>
+    <dimen name="space_medium">16dp</dimen>
+    <dimen name="space_large">24dp</dimen>
+    <dimen name="card_gap">12dp</dimen>
+    <dimen name="corner_card">16dp</dimen>
+    <dimen name="date_block_size">56dp</dimen>
+    <dimen name="fab_clearance">96dp</dimen>
+    <dimen name="button_height">56dp</dimen>
+    <dimen name="button_corner">12dp</dimen>
+    <dimen name="spinner_min_height">48dp</dimen>
+</resources>
