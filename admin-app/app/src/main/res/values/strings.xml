@@ -7,6 +7,9 @@
     <string name="hint_event_name">Event name</string>
     <string name="hint_date">Date</string>
     <string name="hint_location">Location</string>
+    <string name="hint_desc">Description</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_phone">Phone</string>
     <string name="hint_organizer">Organizer</string>
     <string name="label_type">Type</string>
     <string name="button_save">Save event</string>
@@ -17,7 +20,11 @@
         <item>Social</item>
         <item>Other</item>
     </string-array>
-    <string name="error_required">This field is required</string>
+    <string name="name_required">Please enter the event name</string>
+    <string name="location_required">Please enter the event location</string>
+    <string name="organizer_required">Please enter the event organizer</string>
+    <string name="email_invalid">Please enter a valid email address</string>
+    <string name="phone_invalid">Please enter a valid phone number</string>
     <string name="error_too_long">Maximum %1$d characters</string>
     <string name="label_status">Status</string>
     <string-array name="event_statuses">
@@ -30,6 +37,7 @@
     <string name="multiple_event">events</string>
     <string name="insert_error">Event Creation Failed!</string>
     <string name="update_error">Failed to update the event!</string>
+    <string name="duplicate_error">An event with the same name and date exists!</string>
     <string name="title_edit_event">Edit event</string>
     <string name="meta_string">%1$s · %2$s</string>
     <string name="button_delete">Delete event</string>
@@ -37,4 +45,17 @@
     <string name="dialog_title">Delete event?</string>
     <string name="dialog_message">The event will be permanently deleted.</string>
     <string name="dialog_yes">Delete</string>
+    <string name="confirm_title">Confirm event details</string>
+    <string name="confirm_message">Name: %1$s
+        \nDate: %2$s
+        \nLocation: %3$s
+        \nOrganizer: %4$s
+        \nType: %5$s
+        \nStatus: %6$s
+        \nDescription: %7$s
+        \nEmail: %8$s
+        \nPhone: %9$s</string>
+    <string name="confirm_save">Save</string>
+    <string name="not_provided">Not Provided</string>
+    <string name="back">Back</string>
 </resources>

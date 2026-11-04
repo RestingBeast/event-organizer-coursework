@@ -9,9 +9,6 @@ import android.util.Log
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-private const val DB_NAME = "events.db"
-private const val DB_VERSION = 1
-
 class EventDbHelper(context: Context):
         SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
     private val tableName = "events"
@@ -22,18 +19,24 @@ class EventDbHelper(context: Context):
     private val colOrganizer = "organizer"
     private val colType = "type"
     private val colStatus = "status"
+    private val colDescription = "description"
+    private val colEmail = "email"
+    private val colPhone = "phone"
 
     override fun onCreate(db: SQLiteDatabase?) {
         val query = """
             |CREATE TABLE $tableName
             |(
             |   $colID INTEGER PRIMARY KEY AUTOINCREMENT,
-            |   $colName TEXT,
-            |   $colDate TEXT,
+            |   $colName TEXT NOT NULL,
+            |   $colDate TEXT NOT NULL,
             |   $colLocation TEXT,
             |   $colOrganizer TEXT,
             |   $colType TEXT,
-            |   $colStatus TEXT
+            |   $colStatus TEXT,
+            |   $colDescription TEXT,
+            |   $colEmail TEXT,
+            |   $colPhone TEXT
             |);
         """.trimMargin()
         db?.execSQL(query)
@@ -55,6 +58,9 @@ class EventDbHelper(context: Context):
         val organizer = cursor.getString(cursor.getColumnIndexOrThrow(colOrganizer))
         val type = cursor.getString(cursor.getColumnIndexOrThrow(colType))
         val status = cursor.getString(cursor.getColumnIndexOrThrow(colStatus))
+        val desc = cursor.getString(cursor.getColumnIndexOrThrow(colDescription))
+        val email = cursor.getString(cursor.getColumnIndexOrThrow(colEmail))
+        val phone = cursor.getString(cursor.getColumnIndexOrThrow(colPhone))
         return Event(
             id = id,
             name = name,
@@ -62,8 +68,10 @@ class EventDbHelper(context: Context):
             location = location,
             organizer = organizer,
             type = type,
-            status = status
-
+            status = status,
+            description = desc,
+            email = email,
+            phone = phone
         )
     }
 
@@ -75,17 +83,34 @@ class EventDbHelper(context: Context):
         values.put(colOrganizer, event.organizer)
         values.put(colType, event.type)
         values.put(colStatus, event.status)
+        values.put(colDescription, event.description)
+        values.put(colEmail, event.email)
+        values.put(colPhone, event.phone)
         return values
     }
 
-    fun insert(event: Event): Long {
-        val db = this.writableDatabase
-        val values = toContentValues(event)
-        val result = db.insert(tableName, null, values)
-        db.close()
-        return result
+    private fun validateEvent(event: Event, id: Long = -1): Boolean {
+        val db = this.readableDatabase
+        val cursor: Cursor = db.query(
+            tableName,
+            null,
+            "$colName = ? COLLATE NOCASE AND $colDate = ? AND $colID != ?",
+            arrayOf(
+                event.name,
+                event.date.format(DateTimeFormatter.ISO_LOCAL_DATE),
+                id.toString()
+            ),
+            null,
+            null,
+            null
+        )
+        if (cursor.count != 0) {
+            cursor.close()
+            return (false)
+        }
+        cursor.close()
+        return (true)
     }
-
     fun getAll(): ArrayList<Event> {
         val db = this.readableDatabase
         val query = "SELECT * FROM $tableName ORDER BY $colDate;"
@@ -101,7 +126,6 @@ class EventDbHelper(context: Context):
         cursor.close()
         return eventList
     }
-
     fun getById(id: Long): Event? {
         var event: Event? = null
         val db = this.readableDatabase
@@ -112,8 +136,18 @@ class EventDbHelper(context: Context):
         cursor.close()
         return event
     }
-
+    fun insert(event: Event): Long {
+        if (!validateEvent(event))
+            return (-2)
+        val db = this.writableDatabase
+        val values = toContentValues(event)
+        val result = db.insert(tableName, null, values)
+        db.close()
+        return result
+    }
     fun update(id: Long, event: Event): Int {
+        if (!validateEvent(event, id))
+            return (-2)
         val db =this.writableDatabase
         val values = toContentValues(event)
         val result = db.update(
@@ -125,7 +159,6 @@ class EventDbHelper(context: Context):
         db.close()
         return result
     }
-
     fun delete(id: Long): Int {
         val db = this.writableDatabase
         val result = db.delete(
@@ -134,5 +167,9 @@ class EventDbHelper(context: Context):
             arrayOf(id.toString()))
         db.close()
         return result
+    }
+    companion object {
+        private const val DB_NAME = "events.db"
+        private const val DB_VERSION = 1
     }
 }

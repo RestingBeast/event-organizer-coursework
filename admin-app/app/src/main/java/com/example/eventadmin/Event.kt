@@ -9,5 +9,8 @@ data class Event(
     val organizer: String,
     val type: String,
     val status: String,
-    val id: Long = 0
+    val id: Long = -1,
+    val description: String? = null,
+    val email: String? = null,
+    val phone: String? = null,
 )

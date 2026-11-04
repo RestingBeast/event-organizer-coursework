@@ -3,6 +3,7 @@ package com.example.eventadmin
 import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -15,6 +16,8 @@ import com.example.eventadmin.databinding.ActivityEventFormBinding
 import java.time.LocalDate
 import com.google.android.material.textfield.TextInputLayout
 import android.view.View.VISIBLE
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.time.format.DateTimeFormatter
 
 const val MAX_FIELD_LENGTH = 64
 const val EXTRA_EVENT_ID = "event_id"
@@ -28,24 +31,69 @@ class EventFormActivity : AppCompatActivity() {
     }
     private fun validateField(
         text: String,
-        input: TextInputLayout
+        input: TextInputLayout,
+        error: String
     ): Boolean {
         if (text.isBlank()) {
-            input.error = getString(R.string.error_required)
-            return (false)
+            input.error = error
+            return false
         } else if (text.length > MAX_FIELD_LENGTH) {
             input.error = getString(R.string.error_too_long, MAX_FIELD_LENGTH)
-            return (false)
+            return false
         }
-        return (true)
+        return true
     }
-    private fun validateFields(name: String, location: String, organizer: String): Boolean {
+    private fun validateDesc(desc: String): Boolean{
+        val maxLength = resources.getInteger(R.integer.max_desc_length)
+        if (desc.length > maxLength) {
+            binding.inputDesc.error = getString(R.string.error_too_long, maxLength)
+            return false
+        }
+        return true
+    }
+    private fun validateEmail(email: String): Boolean{
+        if (!email.isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.inputEmail.error = getString(R.string.email_invalid)
+            return false
+        } else if (email.length > MAX_FIELD_LENGTH) {
+            binding.inputEmail.error = getString(R.string.error_too_long, MAX_FIELD_LENGTH)
+            return false
+        }
+        return true
+    }
+    private fun validatePhone(phone: String): Boolean{
+        if (!phone.isEmpty() && !Patterns.PHONE.matcher(phone).matches()) {
+            binding.inputPhone.error = getString(R.string.phone_invalid)
+            return false
+        } else if (phone.length > MAX_FIELD_LENGTH) {
+            binding.inputPhone.error = getString(R.string.error_too_long, MAX_FIELD_LENGTH)
+            return false
+        }
+        return true
+    }
+    private fun validateFields(
+        name: String,
+        location: String,
+        organizer: String,
+        desc: String,
+        email: String,
+        phone: String
+    ): Boolean {
         var isValid = true
-        if (!validateField(name, binding.inputName))
+        if (!validateField(name, binding.inputName,
+                getString(R.string.name_required)))
             isValid = false
-        if (!validateField(location, binding.inputLocation))
+        if (!validateField(location, binding.inputLocation,
+                getString(R.string.location_required)))
             isValid = false
-        if (!validateField(organizer, binding.inputOrganizer))
+        if (!validateField(organizer, binding.inputOrganizer,
+                getString(R.string.organizer_required)))
+            isValid = false
+        if (!validateDesc(desc))
+            isValid = false
+        if (!validateEmail(email))
+            isValid = false
+        if (!validatePhone(phone))
             isValid = false
         return (isValid)
     }
@@ -53,6 +101,58 @@ class EventFormActivity : AppCompatActivity() {
         binding.inputName.error = null
         binding.inputLocation.error = null
         binding.inputOrganizer.error = null
+        binding.inputDesc.error = null
+        binding.inputEmail.error = null
+        binding.inputPhone.error = null
+    }
+    private fun storeEvent(event: Event): Boolean {
+        when (editingId) {
+            -1L -> {
+                when (dbHelper.insert(event)) {
+                    -1L -> showToast(getString(R.string.insert_error))
+                    -2L -> showToast(getString(R.string.duplicate_error))
+                    else -> return true
+                }
+            }
+            else -> {
+                when (dbHelper.update(editingId, event)) {
+                    0 -> showToast(getString(R.string.update_error))
+                    -2 -> showToast(getString(R.string.duplicate_error))
+                    else -> return true
+                }
+            }
+        }
+        return false
+    }
+    private fun showConfirmDialog(event: Event) {
+        val dialog = MaterialAlertDialogBuilder(this)
+        dialog.setTitle(getString(R.string.confirm_title))
+            .setMessage(getString(
+                R.string.confirm_message,
+                event.name,
+                event.date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                event.location,
+                event.organizer,
+                event.type,
+                event.status,
+                event.description ?: getString(R.string.not_provided),
+                event.email ?: getString(R.string.not_provided),
+                event.phone ?: getString(R.string.not_provided)
+            ))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.confirm_save)) {
+                dialog,_ ->
+                    if (storeEvent(event)) {
+                        dialog.dismiss()
+                        finish()
+                    }
+            }
+            .setNegativeButton(getString(R.string.back)) {
+                dialog,_ ->
+                    dialog.dismiss()
+            }
+        val alert = dialog.create()
+        alert.show()
     }
     private fun saveEvent(v: View) {
         clearError()
@@ -65,7 +165,10 @@ class EventFormActivity : AppCompatActivity() {
         val organizer = binding.txtOrganizer.text.toString().trim()
         val type = binding.spinnerType.selectedItem.toString()
         val status = binding.spinnerStatus.selectedItem.toString()
-        if (!validateFields(name, location, organizer))
+        val desc = binding.txtDesc.text.toString().trim()
+        val email = binding.txtEmail.text.toString().trim()
+        val phone = binding.txtPhone.text.toString().trim()
+        if (!validateFields(name, location, organizer, desc, email, phone))
             return
         val event = Event(
             name = name,
@@ -73,19 +176,12 @@ class EventFormActivity : AppCompatActivity() {
             location = location,
             organizer = organizer,
             type = type,
-            status = status
+            status = status,
+            description = desc.ifEmpty { null },
+            email = email.ifEmpty { null },
+            phone = phone.ifEmpty { null }
         )
-        when (editingId) {
-            -1L -> {
-                if (dbHelper.insert(event) == -1L)
-                    showToast(getString(R.string.insert_error))
-            }
-            else -> {
-                if (dbHelper.update(editingId, event) == 0)
-                    showToast(getString(R.string.update_error))
-            }
-        }
-        finish()
+        showConfirmDialog(event)
     }
     private fun deleteEvent(eventId: Long) {
         if (dbHelper.delete(eventId) == 0)
@@ -119,6 +215,9 @@ class EventFormActivity : AppCompatActivity() {
         binding.txtName.setText(event.name)
         binding.txtLocation.setText(event.location)
         binding.txtOrganizer.setText(event.organizer)
+        binding.txtDesc.setText(event.description)
+        binding.txtEmail.setText(event.email)
+        binding.txtPhone.setText(event.phone)
         binding.datePicker.updateDate(
             event.date.year,
             event.date.monthValue - 1,
