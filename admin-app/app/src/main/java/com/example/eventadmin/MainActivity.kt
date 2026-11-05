@@ -15,7 +15,7 @@ import com.example.eventadmin.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var dbHelper: EventDbHelper
+    private lateinit var dbHelper: DbHelper
 
     private fun showEvents()
     {
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        dbHelper = EventDbHelper(this)
+        dbHelper = DbHelper(this)
         binding.fabAddEvent.setOnClickListener {
             val intent = Intent(this, EventFormActivity::class.java)
             startActivity(intent)

@@ -10,7 +10,7 @@ data class Event(
     val type: String,
     val status: String,
     val id: Long = -1,
-    val description: String? = null,
+    val desc: String? = null,
     val email: String? = null,
     val phone: String? = null,
 )

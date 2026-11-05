@@ -24,7 +24,7 @@ const val EXTRA_EVENT_ID = "event_id"
 
 class EventFormActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEventFormBinding
-    private lateinit var dbHelper: EventDbHelper
+    private lateinit var dbHelper: DbHelper
     private var editingId = -1L
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
@@ -135,7 +135,7 @@ class EventFormActivity : AppCompatActivity() {
                 event.organizer,
                 event.type,
                 event.status,
-                event.description ?: getString(R.string.not_provided),
+                event.desc ?: getString(R.string.not_provided),
                 event.email ?: getString(R.string.not_provided),
                 event.phone ?: getString(R.string.not_provided)
             ))
@@ -177,7 +177,7 @@ class EventFormActivity : AppCompatActivity() {
             organizer = organizer,
             type = type,
             status = status,
-            description = desc.ifEmpty { null },
+            desc = desc.ifEmpty { null },
             email = email.ifEmpty { null },
             phone = phone.ifEmpty { null }
         )
@@ -215,7 +215,7 @@ class EventFormActivity : AppCompatActivity() {
         binding.txtName.setText(event.name)
         binding.txtLocation.setText(event.location)
         binding.txtOrganizer.setText(event.organizer)
-        binding.txtDesc.setText(event.description)
+        binding.txtDesc.setText(event.desc)
         binding.txtEmail.setText(event.email)
         binding.txtPhone.setText(event.phone)
         binding.datePicker.updateDate(
@@ -246,7 +246,7 @@ class EventFormActivity : AppCompatActivity() {
         )
         binding = ActivityEventFormBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        dbHelper = EventDbHelper(this)
+        dbHelper = DbHelper(this)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
