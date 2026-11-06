@@ -16,7 +16,6 @@ import com.example.eventadmin.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var dbHelper: DbHelper
-
     private fun showEvents() {
         val events = dbHelper.getAllEvents()
         val adapter = EventAdapter(events) {

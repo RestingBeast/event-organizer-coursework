@@ -46,7 +46,7 @@ class DbHelper(context: Context):
             |   ${SessionEntry.COL_EVENT_ID} INTEGER NOT NULL REFERENCES ${EventEntry.TABLE_NAME}(${BaseColumns._ID}) ON DELETE CASCADE,
             |   ${SessionEntry.COL_NAME} TEXT NOT NULL,
             |   ${SessionEntry.COL_TIME} TEXT NOT NULL,
-            |   ${SessionEntry.COL_TYPE} TEXT,
+            |   ${SessionEntry.COL_TYPE} TEXT NOT NULL,
             |   ${SessionEntry.COL_SPEAKER} TEXT,
             |   ${SessionEntry.COL_ROOM} TEXT,
             |   ${SessionEntry.COL_DESC} TEXT

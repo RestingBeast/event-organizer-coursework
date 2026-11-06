@@ -15,6 +15,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:baselineAligned="false"
         android:orientation="horizontal"
         android:padding="@dimen/space_medium"
         android:gravity="center_vertical">
@@ -62,6 +63,7 @@
                 android:layout_marginTop="@dimen/space_extra_small"
                 android:maxLines="1"
                 android:ellipsize="end" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,7 +89,25 @@
             </LinearLayout>
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="@dimen/space_small">
+            <TextView
+                android:id="@+id/txtSessionCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                android:textStyle="bold"
+                android:textColor="@color/accent"/>
+            <TextView
+                android:id="@+id/txtSessionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="@color/text_secondary"/>
+        </LinearLayout>
     </LinearLayout>
-
-
 </com.google.android.material.card.MaterialCardView>

@@ -2,7 +2,9 @@
     <string name="app_name">Event Admin</string>
     <string name="title">Events</string>
     <string name="no_event_text">No events yet.\nTap + Add Event to create one.</string>
+    <string name="no_session_text">No sessions yet.\nTap + Add Session to create one.</string>
     <string name="add_event">Add Event</string>
+    <string name="add_session">Add Session</string>
     <string name="title_new_event">New event</string>
     <string name="hint_event_name">Event name</string>
     <string name="hint_date">Date</string>
@@ -35,10 +37,13 @@
     <string name="event_count">%1$d %2$s</string>
     <string name="single_event">event</string>
     <string name="multiple_event">events</string>
+    <string name="single_session">session</string>
+    <string name="multiple_sessions">sessions</string>
     <string name="insert_error">Event Creation Failed!</string>
     <string name="update_error">Failed to update the event!</string>
     <string name="duplicate_error">An event with the same name and date exists!</string>
     <string name="title_edit_event">Edit event</string>
+    <string name="button_edit_event">Edit event</string>
     <string name="meta_string">%1$s · %2$s</string>
     <string name="button_delete">Delete event</string>
     <string name="delete_error">Failed to delete the event!</string>

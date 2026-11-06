@@ -22,7 +22,10 @@
         </activity>
         <activity
             android:name=".EventFormActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".SessionListActivity"
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>
