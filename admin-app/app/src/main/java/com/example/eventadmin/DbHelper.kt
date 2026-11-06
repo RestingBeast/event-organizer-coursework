@@ -11,6 +11,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import com.example.eventadmin.DbContract.EventEntry
 import com.example.eventadmin.DbContract.SessionEntry
+import java.time.LocalTime
 
 class DbHelper(context: Context):
         SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
@@ -45,7 +46,6 @@ class DbHelper(context: Context):
         db?.execSQL(sessions)
         Log.d("SQLite DB", "tables created!")
     }
-
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         val events = "DROP TABLE IF EXISTS ${EventEntry.TABLE_NAME};"
         val sessions = "DROP TABLE IF EXISTS ${SessionEntry.TABLE_NAME};"
@@ -54,14 +54,12 @@ class DbHelper(context: Context):
         Log.d("SQLite DB", "tables upgraded!")
         onCreate(db)
     }
-
     override fun onConfigure(db: SQLiteDatabase?) {
         super.onConfigure(db)
         db?.setForeignKeyConstraintsEnabled(true)
     }
-
     private fun toEvent(cursor: Cursor): Event {
-        val id = cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID ))
+        val id = cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID))
         val name = cursor.getString(cursor.getColumnIndexOrThrow(EventEntry.COL_NAME))
         val date = cursor.getString(cursor.getColumnIndexOrThrow(EventEntry.COL_DATE))
         val location = cursor.getString(cursor.getColumnIndexOrThrow(EventEntry.COL_LOCATION))
@@ -84,8 +82,27 @@ class DbHelper(context: Context):
             phone = phone
         )
     }
-
-    private fun toContentValues(event: Event): ContentValues {
+    private fun toSession(cursor: Cursor): Session {
+        val id = cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID))
+        val eventId = cursor.getLong(cursor.getColumnIndexOrThrow(SessionEntry.COL_EVENT_ID))
+        val name = cursor.getString(cursor.getColumnIndexOrThrow(SessionEntry.COL_NAME))
+        val time = cursor.getString(cursor.getColumnIndexOrThrow(SessionEntry.COL_TIME))
+        val speaker = cursor.getString(cursor.getColumnIndexOrThrow(SessionEntry.COL_SPEAKER))
+        val room = cursor.getString(cursor.getColumnIndexOrThrow(SessionEntry.COL_ROOM))
+        val type = cursor.getString(cursor.getColumnIndexOrThrow(SessionEntry.COL_TYPE))
+        val desc = cursor.getString(cursor.getColumnIndexOrThrow(SessionEntry.COL_DESC))
+        return Session(
+            id = id,
+            name = name,
+            eventId = eventId,
+            time = LocalTime.parse(time),
+            speaker = speaker,
+            room = room,
+            type = type,
+            desc = desc
+        )
+    }
+    private fun eventToContentValues(event: Event): ContentValues {
         val values = ContentValues()
         values.put(EventEntry.COL_NAME, event.name)
         values.put(EventEntry.COL_DATE, event.date.format(DateTimeFormatter.ISO_LOCAL_DATE))
@@ -98,7 +115,17 @@ class DbHelper(context: Context):
         values.put(EventEntry.COL_PHONE, event.phone)
         return values
     }
-
+    private fun sessionToContentValues(session: Session): ContentValues {
+        val values = ContentValues()
+        values.put(SessionEntry.COL_EVENT_ID, session.eventId)
+        values.put(SessionEntry.COL_NAME, session.name)
+        values.put(SessionEntry.COL_TIME, session.time.format(DateTimeFormatter.ISO_LOCAL_TIME))
+        values.put(SessionEntry.COL_SPEAKER, session.speaker)
+        values.put(SessionEntry.COL_ROOM, session.room)
+        values.put(SessionEntry.COL_TYPE, session.type)
+        values.put(SessionEntry.COL_DESC, session.desc)
+        return values
+    }
     private fun validateEvent(event: Event, id: Long = -1): Boolean {
         val db = this.readableDatabase
         val cursor: Cursor = db.query(
@@ -122,7 +149,7 @@ class DbHelper(context: Context):
         cursor.close()
         return (true)
     }
-    fun getAll(): ArrayList<Event> {
+    fun getAllEvents(): ArrayList<Event> {
         val db = this.readableDatabase
         val query = "SELECT * FROM ${EventEntry.TABLE_NAME} ORDER BY ${EventEntry.COL_DATE};"
 
@@ -137,7 +164,7 @@ class DbHelper(context: Context):
         cursor.close()
         return eventList
     }
-    fun getById(id: Long): Event? {
+    fun getEventById(id: Long): Event? {
         var event: Event? = null
         val db = this.readableDatabase
         val query = "SELECT * FROM ${EventEntry.TABLE_NAME} WHERE ${BaseColumns._ID} = ?;"
@@ -147,20 +174,20 @@ class DbHelper(context: Context):
         cursor.close()
         return event
     }
-    fun insert(event: Event): Long {
+    fun insertEvent(event: Event): Long {
         if (!validateEvent(event))
             return (-2)
         val db = this.writableDatabase
-        val values = toContentValues(event)
+        val values = eventToContentValues(event)
         val result = db.insert(EventEntry.TABLE_NAME, null, values)
         db.close()
         return result
     }
-    fun update(id: Long, event: Event): Int {
+    fun updateEvent(id: Long, event: Event): Int {
         if (!validateEvent(event, id))
             return (-2)
         val db =this.writableDatabase
-        val values = toContentValues(event)
+        val values = eventToContentValues(event)
         val result = db.update(
             EventEntry.TABLE_NAME,
             values,
@@ -170,10 +197,64 @@ class DbHelper(context: Context):
         db.close()
         return result
     }
-    fun delete(id: Long): Int {
+    fun deleteEvent(id: Long): Int {
         val db = this.writableDatabase
         val result = db.delete(
             EventEntry.TABLE_NAME,
+            "${BaseColumns._ID} = ?",
+            arrayOf(id.toString()))
+        db.close()
+        return result
+    }
+    fun getSessionsByEvent(eventId: Long): ArrayList<Session> {
+        val db = this.readableDatabase
+        val query = "SELECT * FROM ${SessionEntry.TABLE_NAME} WHERE ${SessionEntry.COL_EVENT_ID} = ? " +
+                "ORDER BY ${SessionEntry.COL_TIME};"
+
+        val cursor = db.rawQuery(query, arrayOf(eventId.toString()))
+        val sessionList = ArrayList<Session>()
+        if (cursor.moveToFirst()) {
+            do {
+                val session = toSession(cursor)
+                sessionList.add(session)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return sessionList
+    }
+    fun getSessionById(id: Long): Session? {
+        var session: Session? = null
+        val db = this.readableDatabase
+        val query = "SELECT * FROM ${SessionEntry.TABLE_NAME} WHERE ${BaseColumns._ID} = ?;"
+        val cursor = db.rawQuery(query, arrayOf(id.toString()))
+        if (cursor.moveToFirst())
+            session = toSession(cursor)
+        cursor.close()
+        return session
+    }
+    fun insertSession(session: Session): Long {
+        val db = this.writableDatabase
+        val values = sessionToContentValues(session)
+        val result = db.insert(SessionEntry.TABLE_NAME, null, values)
+        db.close()
+        return result
+    }
+    fun updateSession(id: Long, session: Session): Int {
+        val db =this.writableDatabase
+        val values = sessionToContentValues(session)
+        val result = db.update(
+            SessionEntry.TABLE_NAME,
+            values,
+            "${BaseColumns._ID} = ?",
+            arrayOf(id.toString())
+        )
+        db.close()
+        return result
+    }
+    fun deleteSession(id: Long): Int {
+        val db = this.writableDatabase
+        val result = db.delete(
+            SessionEntry.TABLE_NAME,
             "${BaseColumns._ID} = ?",
             arrayOf(id.toString()))
         db.close()

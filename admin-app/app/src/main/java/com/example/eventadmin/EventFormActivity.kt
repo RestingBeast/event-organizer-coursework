@@ -108,14 +108,14 @@ class EventFormActivity : AppCompatActivity() {
     private fun storeEvent(event: Event): Boolean {
         when (editingId) {
             -1L -> {
-                when (dbHelper.insert(event)) {
+                when (dbHelper.insertEvent(event)) {
                     -1L -> showToast(getString(R.string.insert_error))
                     -2L -> showToast(getString(R.string.duplicate_error))
                     else -> return true
                 }
             }
             else -> {
-                when (dbHelper.update(editingId, event)) {
+                when (dbHelper.updateEvent(editingId, event)) {
                     0 -> showToast(getString(R.string.update_error))
                     -2 -> showToast(getString(R.string.duplicate_error))
                     else -> return true
@@ -184,7 +184,7 @@ class EventFormActivity : AppCompatActivity() {
         showConfirmDialog(event)
     }
     private fun deleteEvent(eventId: Long) {
-        if (dbHelper.delete(eventId) == 0)
+        if (dbHelper.deleteEvent(eventId) == 0)
             showToast(getString(R.string.delete_error))
     }
     private fun confirmDelete(eventId: Long) {
@@ -206,7 +206,7 @@ class EventFormActivity : AppCompatActivity() {
         alert.show()
     }
     private fun loadEvent(editingId: Long) {
-        val event = dbHelper.getById(editingId)
+        val event = dbHelper.getEventById(editingId)
         event ?: run {
             finish()
             return
