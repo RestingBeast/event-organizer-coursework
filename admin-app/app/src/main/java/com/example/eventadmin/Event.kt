@@ -13,4 +13,5 @@ data class Event(
     val desc: String? = null,
     val email: String? = null,
     val phone: String? = null,
+    val sessions: Int = 0
 )

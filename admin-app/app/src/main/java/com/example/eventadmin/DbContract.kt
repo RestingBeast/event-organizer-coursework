@@ -14,6 +14,7 @@ object DbContract {
         const val COL_DESC = "description"
         const val COL_EMAIL = "email"
         const val COL_PHONE = "phone"
+        const val COL_SESSIONS = "sessions"
     }
     object SessionEntry : BaseColumns {
         const val TABLE_NAME = "sessions"

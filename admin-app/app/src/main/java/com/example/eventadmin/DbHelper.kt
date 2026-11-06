@@ -15,6 +15,16 @@ import java.time.LocalTime
 
 class DbHelper(context: Context):
         SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+    private val selectEvent = """
+        |SELECT *,
+        |   (SELECT 
+        |       COUNT(*) 
+        |   FROM ${SessionEntry.TABLE_NAME} AS s
+        |   WHERE s.${SessionEntry.COL_EVENT_ID} = e.${BaseColumns._ID}
+        |   ) AS ${EventEntry.COL_SESSIONS}
+        |FROM
+        |   ${EventEntry.TABLE_NAME} AS e
+    """.trimMargin()
     override fun onCreate(db: SQLiteDatabase?) {
         val events = """
             |CREATE TABLE ${EventEntry.TABLE_NAME} (
@@ -69,6 +79,7 @@ class DbHelper(context: Context):
         val desc = cursor.getString(cursor.getColumnIndexOrThrow(EventEntry.COL_DESC))
         val email = cursor.getString(cursor.getColumnIndexOrThrow(EventEntry.COL_EMAIL))
         val phone = cursor.getString(cursor.getColumnIndexOrThrow(EventEntry.COL_PHONE))
+        val sessions = cursor.getInt(cursor.getColumnIndexOrThrow(EventEntry.COL_SESSIONS))
         return Event(
             id = id,
             name = name,
@@ -79,7 +90,8 @@ class DbHelper(context: Context):
             status = status,
             desc = desc,
             email = email,
-            phone = phone
+            phone = phone,
+            sessions = sessions
         )
     }
     private fun toSession(cursor: Cursor): Session {
@@ -151,7 +163,7 @@ class DbHelper(context: Context):
     }
     fun getAllEvents(): ArrayList<Event> {
         val db = this.readableDatabase
-        val query = "SELECT * FROM ${EventEntry.TABLE_NAME} ORDER BY ${EventEntry.COL_DATE};"
+        val query = selectEvent + " ORDER BY ${EventEntry.COL_DATE};"
 
         val cursor = db.rawQuery(query, null)
         val eventList = ArrayList<Event>()
@@ -167,7 +179,7 @@ class DbHelper(context: Context):
     fun getEventById(id: Long): Event? {
         var event: Event? = null
         val db = this.readableDatabase
-        val query = "SELECT * FROM ${EventEntry.TABLE_NAME} WHERE ${BaseColumns._ID} = ?;"
+        val query = selectEvent + " WHERE ${BaseColumns._ID} = ?;"
         val cursor = db.rawQuery(query, arrayOf(id.toString()))
         if (cursor.moveToFirst())
             event = toEvent(cursor)
