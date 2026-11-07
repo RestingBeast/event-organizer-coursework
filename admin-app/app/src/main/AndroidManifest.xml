@@ -26,6 +26,9 @@
         <activity
             android:name=".SessionListActivity"
             android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".SessionFormActivity"
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>

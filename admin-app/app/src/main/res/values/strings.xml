@@ -34,7 +34,6 @@
         <item>Completed</item>
         <item>Cancelled</item>
     </string-array>
-    <string name="event_count">%1$d %2$s</string>
     <string name="single_event">event</string>
     <string name="multiple_event">events</string>
     <string name="single_session">session</string>
@@ -44,13 +43,18 @@
     <string name="duplicate_error">An event with the same name and date exists!</string>
     <string name="title_edit_event">Edit event</string>
     <string name="button_edit_event">Edit event</string>
-    <string name="meta_string">%1$s · %2$s</string>
     <string name="button_delete">Delete event</string>
     <string name="delete_error">Failed to delete the event!</string>
     <string name="dialog_title">Delete event?</string>
     <string name="dialog_message">The event will be permanently deleted.</string>
     <string name="dialog_yes">Delete</string>
     <string name="confirm_title">Confirm event details</string>
+    <string name="confirm_save">Save</string>
+    <string name="not_provided">Not Provided</string>
+    <string name="back">Back</string>
+    <string name="item_count">%1$d %2$s</string>
+    <string name="meta_string">%1$s · %2$s</string>
+    <string name="info_string">%1$s . %2$s . %3$s</string>
     <string name="confirm_message">Name: %1$s
         \nDate: %2$s
         \nLocation: %3$s
@@ -60,7 +64,4 @@
         \nDescription: %7$s
         \nEmail: %8$s
         \nPhone: %9$s</string>
-    <string name="confirm_save">Save</string>
-    <string name="not_provided">Not Provided</string>
-    <string name="back">Back</string>
 </resources>

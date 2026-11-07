@@ -20,8 +20,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.format.DateTimeFormatter
 
 const val MAX_FIELD_LENGTH = 64
-const val EXTRA_EVENT_ID = "event_id"
-
 class EventFormActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEventFormBinding
     private lateinit var dbHelper: DbHelper

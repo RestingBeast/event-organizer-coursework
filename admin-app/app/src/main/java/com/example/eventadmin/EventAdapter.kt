@@ -66,6 +66,12 @@ class EventAdapter(
                 txtStatus.setBackgroundResource(R.drawable.bg_status_completed)
             }
         }
+        holder.binding.txtSessionCount.text = event.sessions.toString()
+        holder.binding.txtSessionLabel.text = when (event.sessions) {
+            1 -> context.getString(R.string.single_session)
+            else -> context.getString(R.string.multiple_sessions)
+        }
+
     }
     override fun getItemCount(): Int = events.size
 }

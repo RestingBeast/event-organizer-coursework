@@ -20,14 +20,14 @@ class MainActivity : AppCompatActivity() {
         val events = dbHelper.getAllEvents()
         val adapter = EventAdapter(events) {
             event ->
-            val intent = Intent(this, EventFormActivity::class.java)
+            val intent = Intent(this, SessionListActivity::class.java)
             intent.putExtra(EXTRA_EVENT_ID, event.id)
             startActivity(intent)
         }
         binding.recyclerEvents.adapter = adapter
         val count = adapter.itemCount
         binding.txtEventCount.text = getString(
-            R.string.event_count,
+            R.string.item_count,
             count,
             when (count) {
                 1 -> getString(R.string.single_event)
