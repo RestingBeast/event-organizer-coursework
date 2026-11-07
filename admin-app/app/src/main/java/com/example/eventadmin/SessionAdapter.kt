@@ -1,6 +1,8 @@
 package com.example.eventadmin
 
 import android.view.LayoutInflater
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eventadmin.databinding.ItemSessionBinding
@@ -24,7 +26,16 @@ class SessionAdapter (
         val context = holder.binding.root.context
         holder.binding.txtSessionName.text = session.name
         holder.binding.txtTime.text = session.time.format(DateTimeFormatter.ofPattern("HH:mm"))
-        holder.binding.txtSessionMeta.text = "Hello"
+        holder.binding.txtSessionMeta.visibility = VISIBLE
+        if (session.room != null && session.speaker != null)
+            holder.binding.txtSessionMeta.text = context.getString(R.string.meta_string,
+                session.room, session.speaker)
+        else if (session.room != null)
+            holder.binding.txtSessionMeta.text = session.room
+        else if (session.speaker != null)
+            holder.binding.txtSessionMeta.text = session.speaker
+        else
+            holder.binding.txtSessionMeta.visibility = GONE
         holder.binding.txtSessionType.text = session.type
     }
     override fun getItemCount(): Int = sessions.size

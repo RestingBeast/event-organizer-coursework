@@ -29,6 +29,7 @@ class SessionListActivity: AppCompatActivity() {
         binding.txtEventInfo.text = getString(R.string.info_string, event.date.format(
             DateTimeFormatter.ofPattern("dd/MM/yyyy")), event.type, event.status)
         binding.txtEventPlace.text = getString(R.string.meta_string, event.location, event.organizer)
+        binding.txtEventContact.visibility = VISIBLE
         if (event.email != null && event.phone != null)
             binding.txtEventContact.text = getString(R.string.meta_string, event.email, event.phone)
         else if (event.email != null)
@@ -37,15 +38,17 @@ class SessionListActivity: AppCompatActivity() {
             binding.txtEventContact.text = event.phone
         else
             binding.txtEventContact.visibility = GONE
-        if (event.desc != null)
+        if (event.desc != null) {
+            binding.txtEventDesc.visibility = VISIBLE
             binding.txtEventDesc.text = event.desc
+        }
         else
             binding.txtEventDesc.visibility = GONE
         binding.txtSessionCount.text = getString(R.string.item_count, event.sessions,
             getString(if (event.sessions == 1) R.string.single_session else R.string.multiple_sessions))
     }
-    private fun showSessions() {
-        val sessions = dbHelper.getSessionsByEvent(2)
+    private fun showSessions(id: Long) {
+        val sessions = dbHelper.getSessionsByEvent(id)
         val adapter = SessionAdapter(sessions)
         binding.recyclerSessions.adapter = adapter
         val count = adapter.itemCount
@@ -78,7 +81,7 @@ class SessionListActivity: AppCompatActivity() {
         binding.recyclerSessions.layoutManager = LinearLayoutManager(this)
         editingId = intent.getLongExtra(EXTRA_EVENT_ID, -1L)
         if (editingId != -1L) {
-            loadEvent(editingId)
+
             binding.btnEditEvent.setOnClickListener {
                 val intent = Intent(this, EventFormActivity::class.java)
                 intent.putExtra(EXTRA_EVENT_ID, editingId)
@@ -90,12 +93,14 @@ class SessionListActivity: AppCompatActivity() {
         }
         binding.fabAddSession.setOnClickListener {
             val intent = Intent(this, SessionFormActivity::class.java)
+            intent.putExtra(EXTRA_EVENT_ID, editingId)
             startActivity(intent)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        showSessions()
+        loadEvent(editingId)
+        showSessions(editingId)
     }
 }

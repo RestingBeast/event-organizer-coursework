@@ -46,7 +46,7 @@
     <string name="button_delete">Delete event</string>
     <string name="delete_error">Failed to delete the event!</string>
     <string name="dialog_title">Delete event?</string>
-    <string name="dialog_message">The event will be permanently deleted.</string>
+    <string name="dialog_message">The event and its sessions will be permanently deleted.</string>
     <string name="dialog_yes">Delete</string>
     <string name="confirm_title">Confirm event details</string>
     <string name="confirm_save">Save</string>
@@ -54,7 +54,7 @@
     <string name="back">Back</string>
     <string name="item_count">%1$d %2$s</string>
     <string name="meta_string">%1$s · %2$s</string>
-    <string name="info_string">%1$s . %2$s . %3$s</string>
+    <string name="info_string">%1$s · %2$s · %3$s</string>
     <string name="confirm_message">Name: %1$s
         \nDate: %2$s
         \nLocation: %3$s
