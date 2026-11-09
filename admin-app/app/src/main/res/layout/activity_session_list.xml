@@ -77,8 +77,8 @@
         android:textColor="@color/text_secondary"
         android:layout_marginTop="@dimen/space_extra_small"
         app:layout_constraintTop_toBottomOf="@id/txtEventContact"
-        app:layout_constraintStart_toStartOf="@id/txtEventContact"
-        app:layout_constraintEnd_toEndOf="@id/txtEventContact"/>
+        app:layout_constraintStart_toStartOf="@id/txtEventName"
+        app:layout_constraintEnd_toEndOf="@id/txtEventName"/>
     <TextView
         android:id="@+id/txtSessionCount"
         android:layout_width="0dp"
@@ -87,8 +87,8 @@
         android:textColor="@color/text_secondary"
         android:layout_marginTop="@dimen/space_extra_small"
         app:layout_constraintTop_toBottomOf="@id/txtEventDesc"
-        app:layout_constraintStart_toStartOf="@id/txtEventDesc"
-        app:layout_constraintEnd_toEndOf="@id/txtEventDesc"/>
+        app:layout_constraintStart_toStartOf="@id/txtEventName"
+        app:layout_constraintEnd_toEndOf="@id/txtEventName"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerSessions"
         android:layout_width="0dp"
