@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -14,41 +13,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.eventadmin.databinding.ActivityEventFormBinding
 import java.time.LocalDate
-import com.google.android.material.textfield.TextInputLayout
 import android.view.View.VISIBLE
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.format.DateTimeFormatter
 
-const val MAX_FIELD_LENGTH = 64
 class EventFormActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEventFormBinding
     private lateinit var dbHelper: DbHelper
     private var editingId = -1L
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-    private fun validateField(
-        text: String,
-        input: TextInputLayout,
-        error: String
-    ): Boolean {
-        if (text.isBlank()) {
-            input.error = error
-            return false
-        } else if (text.length > MAX_FIELD_LENGTH) {
-            input.error = getString(R.string.error_too_long, MAX_FIELD_LENGTH)
-            return false
-        }
-        return true
-    }
-    private fun validateDesc(desc: String): Boolean{
-        val maxLength = resources.getInteger(R.integer.max_desc_length)
-        if (desc.length > maxLength) {
-            binding.inputDesc.error = getString(R.string.error_too_long, maxLength)
-            return false
-        }
-        return true
-    }
     private fun validateEmail(email: String): Boolean{
         if (!email.isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.inputEmail.error = getString(R.string.email_invalid)
@@ -79,7 +51,7 @@ class EventFormActivity : AppCompatActivity() {
     ): Boolean {
         var isValid = true
         if (!validateField(name, binding.inputName,
-                getString(R.string.name_required)))
+                getString(R.string.event_name_required)))
             isValid = false
         if (!validateField(location, binding.inputLocation,
                 getString(R.string.location_required)))
@@ -87,7 +59,7 @@ class EventFormActivity : AppCompatActivity() {
         if (!validateField(organizer, binding.inputOrganizer,
                 getString(R.string.organizer_required)))
             isValid = false
-        if (!validateDesc(desc))
+        if (!validateDesc(desc, binding.inputDesc))
             isValid = false
         if (!validateEmail(email))
             isValid = false
@@ -107,15 +79,15 @@ class EventFormActivity : AppCompatActivity() {
         when (editingId) {
             -1L -> {
                 when (dbHelper.insertEvent(event)) {
-                    -1L -> showToast(getString(R.string.insert_error))
-                    -2L -> showToast(getString(R.string.duplicate_error))
+                    -1L -> showToast(getString(R.string.event_insert_error), this)
+                    -2L -> showToast(getString(R.string.duplicate_error), this)
                     else -> return true
                 }
             }
             else -> {
                 when (dbHelper.updateEvent(editingId, event)) {
-                    0 -> showToast(getString(R.string.update_error))
-                    -2 -> showToast(getString(R.string.duplicate_error))
+                    0 -> showToast(getString(R.string.event_update_error), this)
+                    -2 -> showToast(getString(R.string.duplicate_error), this)
                     else -> return true
                 }
             }
@@ -183,7 +155,7 @@ class EventFormActivity : AppCompatActivity() {
     }
     private fun deleteEvent(eventId: Long) {
         if (dbHelper.deleteEvent(eventId) == 0)
-            showToast(getString(R.string.delete_error))
+            showToast(getString(R.string.delete_error), this)
     }
     private fun confirmDelete(eventId: Long) {
         val alertDialog = AlertDialog.Builder(this)
