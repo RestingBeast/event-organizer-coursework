@@ -9,7 +9,8 @@ import com.example.eventadmin.databinding.ItemSessionBinding
 import java.time.format.DateTimeFormatter
 
 class SessionAdapter (
-    private val sessions: List<Session>
+    private val sessions: List<Session>,
+    private val onClick: (Session) -> Unit
 ): RecyclerView.Adapter<SessionAdapter.SessionViewHolder>() {
     class SessionViewHolder(val binding: ItemSessionBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -37,6 +38,9 @@ class SessionAdapter (
         else
             holder.binding.txtSessionMeta.visibility = GONE
         holder.binding.txtSessionType.text = session.type
+        holder.binding.root.setOnClickListener {
+            onClick(session)
+        }
     }
     override fun getItemCount(): Int = sessions.size
 }

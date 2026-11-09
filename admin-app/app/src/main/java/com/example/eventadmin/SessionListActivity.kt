@@ -15,6 +15,7 @@ import android.view.View.GONE
 import java.time.format.DateTimeFormatter
 
 const val EXTRA_EVENT_ID = "event_id"
+const val EXTRA_SESSION_ID = "session_id"
 class SessionListActivity: AppCompatActivity() {
     private lateinit var binding: ActivitySessionListBinding
     private lateinit var dbHelper: DbHelper
@@ -49,7 +50,13 @@ class SessionListActivity: AppCompatActivity() {
     }
     private fun showSessions(id: Long) {
         val sessions = dbHelper.getSessionsByEvent(id)
-        val adapter = SessionAdapter(sessions)
+        val adapter = SessionAdapter(sessions) {
+         session ->
+         val intent = Intent(this, SessionFormActivity::class.java)
+         intent.putExtra(EXTRA_SESSION_ID, session.id)
+         intent.putExtra(EXTRA_EVENT_ID, id)
+         startActivity(intent)
+        }
         binding.recyclerSessions.adapter = adapter
         val count = adapter.itemCount
         if (count == 0)

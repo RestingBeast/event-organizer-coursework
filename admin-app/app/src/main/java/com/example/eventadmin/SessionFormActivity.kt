@@ -1,9 +1,9 @@
 package com.example.eventadmin
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.View.VISIBLE
 import android.widget.ArrayAdapter
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
@@ -20,6 +20,7 @@ class SessionFormActivity: AppCompatActivity() {
     private lateinit var binding: ActivitySessionFormBinding
     private lateinit var dbHelper: DbHelper
     private var eventId = -1L
+    private var sessionId = -1L
     private fun showTimePicker() {
         val time: String = binding.txtTime.text.toString()
         val picker = MaterialTimePicker.Builder()
@@ -92,6 +93,21 @@ class SessionFormActivity: AppCompatActivity() {
         else
             finish()
     }
+    private fun loadSession(id: Long) {
+        val session = dbHelper.getSessionById(id)
+        session ?: run {
+            finish()
+            return
+        }
+        binding.txtFormTitle.text = getString(R.string.title_edit_session)
+        binding.txtName.setText(session.name)
+        binding.txtTime.setText(session.time.format(DateTimeFormatter.ofPattern("HH:mm")))
+        binding.txtSpeaker.setText(session.speaker)
+        binding.txtRoom.setText(session.room)
+        binding.txtDesc.setText(session.desc)
+        binding.spinnerType.setSelection(resources.getStringArray(R.array.session_types).indexOf(session.type))
+        binding.btnDelete.visibility = VISIBLE
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,9 +137,8 @@ class SessionFormActivity: AppCompatActivity() {
         binding.btnSave.setOnClickListener(::saveSession)
         dbHelper = DbHelper(this)
         eventId = intent.getLongExtra(EXTRA_EVENT_ID, -1L)
-    }
-
-    override fun onResume() {
-        super.onResume()
+        sessionId = intent.getLongExtra(EXTRA_SESSION_ID, -1L)
+        if (sessionId != -1L)
+            loadSession(sessionId)
     }
 }

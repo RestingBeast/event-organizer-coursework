@@ -43,6 +43,7 @@
     <string name="session_name_required">Please enter the session name</string>
     <string name="time_required">Please select the time</string>
     <!-- Edit Session Form -->
+    <string name="title_edit_session">Edit session</string>
     <string name="button_delete_session">Delete session</string>
     <!-- Singular and Plural -->
     <string name="single_event">event</string>
