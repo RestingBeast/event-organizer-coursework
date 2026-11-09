@@ -82,7 +82,7 @@
             android:id="@+id/lblType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/label_type"
+            android:text="@string/label_event_type"
             android:textAppearance="?attr/textAppearanceBodyLarge"
             android:textColor="@color/text_secondary" />
         <Spinner
@@ -156,7 +156,7 @@
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height"
-            android:text="@string/button_save"
+            android:text="@string/button_save_event"
             app:backgroundTint="@color/accent"
             android:textColor="@color/on_accent"
             app:cornerRadius="@dimen/button_corner"  />
@@ -165,7 +165,7 @@
             android:id="@+id/btnDelete"
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height"
-            android:text="@string/button_delete"
+            android:text="@string/button_delete_event"
             app:strokeColor="@color/danger"
             android:textColor="@color/danger"
             android:visibility="gone"

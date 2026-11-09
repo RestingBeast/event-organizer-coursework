@@ -1,15 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello, World!"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/page_padding"
+        android:paddingVertical="@dimen/space_large"
+        android:divider="@drawable/spacer_medium"
+        android:showDividers="middle">
+        <TextView
+            android:id="@+id/txtFormTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_new_session"
+            android:textAppearance="?attr/textAppearanceHeadlineMedium"
+            android:textStyle="bold" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputName"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_session_name"
+            app:boxBackgroundColor="@color/field"
+            app:boxStrokeColor="@color/accent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtName"
+                android:inputType="textCapWords"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputTime"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_time"
+            app:boxBackgroundColor="@color/field"
+            app:boxStrokeColor="@color/accent"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_schedule">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtTime"
+                android:inputType="none"
+                android:focusable="false"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputSpeaker"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_speaker"
+            app:boxBackgroundColor="@color/field"
+            app:boxStrokeColor="@color/accent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtSpeaker"
+                android:inputType="textCapWords"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputRoom"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_room"
+            app:boxBackgroundColor="@color/field"
+            app:boxStrokeColor="@color/accent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtRoom"
+                android:inputType="textCapWords"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:id="@+id/lblType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_session_type"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:textColor="@color/text_secondary" />
+        <Spinner
+            android:id="@+id/spinnerType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/spinner_min_height" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputDesc"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_desc"
+            app:boxBackgroundColor="@color/field"
+            app:boxStrokeColor="@color/accent"
+            app:counterEnabled="true"
+            app:counterMaxLength="@integer/max_desc_length">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtDesc"
+                android:inputType="textMultiLine"
+                android:minLines="@integer/min_lines"
+                android:maxLines="@integer/max_lines"
+                android:gravity="top|start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:text="@string/button_save_session"
+            app:backgroundTint="@color/accent"
+            android:textColor="@color/on_accent"
+            app:cornerRadius="@dimen/button_corner"  />
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:id="@+id/btnDelete"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:text="@string/button_delete_session"
+            app:strokeColor="@color/danger"
+            android:textColor="@color/danger"
+            android:visibility="gone"
+            app:cornerRadius="@dimen/button_corner"  />
+    </LinearLayout>
+</ScrollView>
