@@ -41,6 +41,11 @@ class SessionAdapter (
         holder.binding.root.setOnClickListener {
             onClick(session)
         }
+        if (session.desc != null) {
+            holder.binding.txtSessionDesc.visibility = VISIBLE
+            holder.binding.txtSessionDesc.text = session.desc
+        } else
+            holder.binding.txtSessionDesc.visibility = GONE
     }
     override fun getItemCount(): Int = sessions.size
 }

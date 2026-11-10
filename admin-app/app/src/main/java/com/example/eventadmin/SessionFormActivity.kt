@@ -89,10 +89,18 @@ class SessionFormActivity: AppCompatActivity() {
             desc = desc.ifEmpty { null },
             type = type
         )
-        if (dbHelper.insertSession(session) == -1L)
-            showToast(getString(R.string.session_insert_error), this)
-        else
-            finish()
+        if (sessionId == -1L) {
+            if (dbHelper.insertSession(session) == -1L)
+                showToast(getString(R.string.session_insert_error), this)
+            else
+                finish()
+        } else {
+            if (dbHelper.updateSession(sessionId, session) == 0)
+                showToast(getString(R.string.update_session_error), this)
+            else
+                finish()
+        }
+
     }
     private fun loadSession(id: Long) {
         val session = dbHelper.getSessionById(id)
@@ -126,7 +134,7 @@ class SessionFormActivity: AppCompatActivity() {
                     finish()
             }
             .setNegativeButton(R.string.back, { _,_ -> })
-        val alert = dialog.create();
+        val alert = dialog.create()
         alert.show()
     }
 

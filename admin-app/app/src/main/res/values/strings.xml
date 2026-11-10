@@ -46,6 +46,7 @@
     <string name="title_edit_session">Edit session</string>
     <string name="button_delete_session">Delete session</string>
     <!-- Edit Session Form Error -->
+    <string name="update_session_error">Failed to update the session!</string>
     <string name="delete_session_error">Failed to delete the session!</string>
     <!-- Singular and Plural -->
     <string name="single_event">event</string>

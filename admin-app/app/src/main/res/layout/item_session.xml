@@ -15,52 +15,61 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:padding="@dimen/space_medium"
-        android:gravity="center_vertical">
-        <TextView
-            android:id="@+id/txtTime"
-            android:layout_width="@dimen/date_block_size"
-            android:layout_height="@dimen/date_block_size"
-            android:gravity="center"
-            android:background="@drawable/bg_date_block"
-            android:textAppearance="?attr/textAppearanceTitleSmall"
-            android:textStyle="bold"
-            android:textColor="@color/text_primary"/>
+        android:orientation="vertical"
+        android:padding="@dimen/space_medium">
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="@dimen/space_medium">
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
             <TextView
-                android:id="@+id/txtSessionName"
-                android:layout_width="match_parent"
+                android:id="@+id/txtTime"
+                android:layout_width="@dimen/date_block_size"
+                android:layout_height="@dimen/date_block_size"
+                android:gravity="center"
+                android:background="@drawable/bg_date_block"
+                android:textAppearance="?attr/textAppearanceTitleSmall"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"/>
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
-                android:textColor="@color/text_primary"
-                android:maxLines="1"
-                android:ellipsize="end" />
-            <TextView
-                android:id="@+id/txtSessionMeta"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceBodySmall"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="@dimen/space_extra_small"
-                android:maxLines="1"
-                android:ellipsize="end" />
-            <TextView
-                android:id="@+id/txtSessionType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_small"
-                android:paddingHorizontal="@dimen/pill_padding_horizontal"
-                android:paddingVertical="@dimen/pill_padding_vertical"
-                android:textAppearance="?attr/textAppearanceLabelSmall"
-                android:textColor="@color/accent"
-                android:background="@drawable/bg_type_pill"/>
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="@dimen/space_medium">
+                <TextView
+                    android:id="@+id/txtSessionName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textColor="@color/text_primary" />
+                <TextView
+                    android:id="@+id/txtSessionMeta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="@dimen/space_extra_small" />
+                <TextView
+                    android:id="@+id/txtSessionType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_small"
+                    android:paddingHorizontal="@dimen/pill_padding_horizontal"
+                    android:paddingVertical="@dimen/pill_padding_vertical"
+                    android:textAppearance="?attr/textAppearanceLabelSmall"
+                    android:textColor="@color/accent"
+                    android:background="@drawable/bg_type_pill"/>
+            </LinearLayout>
         </LinearLayout>
+        <TextView
+            android:id="@+id/txtSessionDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_medium"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="@color/text_primary"
+            android:visibility="gone" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
