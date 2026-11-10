@@ -15,4 +15,5 @@
     <dimen name="button_corner">12dp</dimen>
     <dimen name="spinner_min_height">48dp</dimen>
     <dimen name="btn_back_size">48dp</dimen>
+    <dimen name="ic_filter_size">24dp</dimen>
 </resources>

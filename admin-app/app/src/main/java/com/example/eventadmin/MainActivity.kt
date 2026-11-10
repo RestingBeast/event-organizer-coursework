@@ -9,18 +9,63 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.View.VISIBLE
 import android.view.View.GONE
 import androidx.appcompat.widget.SearchView
+import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.eventadmin.databinding.ActivityMainBinding
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var dbHelper: DbHelper
     private var searchQuery: String = ""
+    private var filterStart: LocalDate? = null
+    private var filterEnd: LocalDate? = null
+    private fun showDatePicker() {
+        val picker = MaterialDatePicker.Builder.dateRangePicker()
+            .setTitleText(R.string.select_date)
+            .setTheme(com.google.android.material.R.style.ThemeOverlay_Material3_MaterialCalendar)
+            .setSelection(
+                Pair(
+                if (filterStart != null)
+                    filterStart!!.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+                else
+                    null,
+                if (filterEnd != null)
+                    filterEnd!!.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+                else
+                    null
+                )
+            ).build()
+        picker.addOnPositiveButtonClickListener {
+            date ->
+                filterStart = Instant.ofEpochMilli(date.first).atZone(ZoneOffset.UTC).toLocalDate()
+                filterEnd = Instant.ofEpochMilli(date.second).atZone(ZoneOffset.UTC).toLocalDate()
+                showEvents()
+        }
+        picker.show(supportFragmentManager, "date_picker")
+    }
+    private fun updateDateChip() {
+        if (filterStart == null) {
+            binding.chipDate.text = getString(R.string.chip_date)
+            binding.chipDate.isChecked = false
+            binding.chipDate.isCloseIconVisible = false
+        } else {
+            binding.chipDate.text = if (filterStart == filterEnd) filterStart!!.format(
+                DateTimeFormatter.ofPattern("dd MMM yyyy")) else "${filterStart!!.format(
+                DateTimeFormatter.ofPattern("dd MMM yyyy"))} – ${filterEnd!!.format(
+                DateTimeFormatter.ofPattern("dd MMM yyyy"))}"
+            binding.chipDate.isChecked = true
+            binding.chipDate.isCloseIconVisible = true
+        }
+    }
     private fun showEvents() {
-        val events = if (searchQuery.isEmpty()) dbHelper.getAllEvents()
-            else dbHelper.searchEvent(searchQuery)
+        val events = dbHelper.searchEvents(searchQuery, filterStart, filterEnd, null)
         val adapter = EventAdapter(events) {
             event ->
             val intent = Intent(this, SessionListActivity::class.java)
@@ -40,11 +85,13 @@ class MainActivity : AppCompatActivity() {
         if (count == 0) {
             binding.txtEmpty.visibility = VISIBLE
             binding.txtEmpty.text = getString(
-            if (searchQuery.isEmpty()) R.string.no_event_text else R.string.no_search_result)
+                if (searchQuery.isEmpty() && filterStart == null)
+                    R.string.no_event_text else R.string.no_search_result)
         }
         else {
             binding.txtEmpty.visibility = GONE
         }
+        updateDateChip()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,6 +131,15 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         })
+        binding.chipDate.setOnClickListener {
+            binding.chipDate.isChecked = filterStart != null
+            showDatePicker()
+        }
+        binding.chipDate.setOnCloseIconClickListener {
+            filterStart = null
+            filterEnd = null
+            showEvents()
+        }
     }
 
     override fun onResume() {

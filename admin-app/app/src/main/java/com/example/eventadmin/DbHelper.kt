@@ -176,14 +176,35 @@ class DbHelper(context: Context):
         cursor.close()
         return eventList
     }
-    fun searchEvent(text: String): ArrayList<Event> {
+    fun searchEvents(
+        text: String,
+        start: LocalDate? = null,
+        end: LocalDate? = null ,
+        organizer: String? = null
+    ): ArrayList<Event> {
         val eventList = ArrayList<Event>()
+        val conditions = ArrayList<String>()
+        val args = ArrayList<String>()
+        if (!text.isEmpty()) {
+            conditions.add("(e.${EventEntry.COL_NAME} LIKE ? OR e.${EventEntry.COL_DESC} LIKE ?)")
+            args.add("$text%")
+            args.add("%$text%")
+        }
+        if (start != null && end != null) {
+            conditions.add("e.${EventEntry.COL_DATE} BETWEEN ? AND ?")
+            args.add(start.format(DateTimeFormatter.ISO_LOCAL_DATE))
+            args.add(end.format(DateTimeFormatter.ISO_LOCAL_DATE))
+        }
+        if (organizer != null) {
+            conditions.add("e.${EventEntry.COL_ORGANIZER} = ?")
+            args.add(organizer)
+        }
         val db = this.readableDatabase
-        val query = selectEvent + " WHERE e.${EventEntry.COL_NAME} LIKE ?" +
-                " OR e.${EventEntry.COL_DESC} LIKE ? ORDER BY e.${EventEntry.COL_DATE}"
-        val cursor = db.rawQuery(query, arrayOf(
-            "$text%", "%$text%"
-        ))
+        var query = selectEvent
+        if (conditions.isNotEmpty())
+            query += " WHERE ${conditions.joinToString(" AND ")}"
+        query += " ORDER BY e.${EventEntry.COL_DATE}"
+        val cursor = db.rawQuery(query, args.toTypedArray())
         if (cursor.moveToFirst()) {
             do {
                 val event = toEvent(cursor)

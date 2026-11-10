@@ -105,10 +105,11 @@
         <item>Keynote</item>
         <item>Others</item>
     </string-array>
-    <!-- Search -->
+    <!-- Search & Filter -->
     <string name="search">Search</string>
     <string name="search_hint">Search name or description</string>
     <string name="no_search_result">No matching events.</string>
-    <string name="chip_date">Date</string>
+    <string name="chip_date">Any date</string>
     <string name="select_date">Select date</string>
+    <string name="filters">Filters</string>
 </resources>

@@ -18,12 +18,40 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+    <ImageView
+        android:id="@+id/imgFilter"
+        android:layout_width="@dimen/ic_filter_size"
+        android:layout_height="@dimen/ic_filter_size"
+        android:src="@drawable/ic_filter"
+        app:tint="@color/text_secondary"
+        android:contentDescription="@string/filters"
+        android:layout_marginStart="@dimen/page_padding"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/chipGroupFilters"
+        app:layout_constraintBottom_toBottomOf="@id/chipGroupFilters"
+        />
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupFilters"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_small"
+        android:layout_marginEnd="@dimen/page_padding"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toEndOf="@id/imgFilter"
+        app:layout_constraintEnd_toEndOf="parent">
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:text="@string/chip_date"/>
+    </com.google.android.material.chip.ChipGroup>
 
     <TextView
         android:id="@+id/txtEventCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toBottomOf="@id/chipGroupFilters"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="@dimen/page_padding"
         android:layout_marginTop="@dimen/space_extra_small"
@@ -34,7 +62,7 @@
         android:id="@+id/recyclerEvents"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/space_large"
+        android:layout_marginTop="@dimen/space_small"
         android:clipToPadding="false"
         android:paddingHorizontal="@dimen/page_padding"
         android:paddingBottom="@dimen/fab_clearance"
