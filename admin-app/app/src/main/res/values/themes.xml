@@ -10,6 +10,8 @@
         <item name="colorOnBackground">@color/text_primary</item>
         <item name="colorOnSurface">@color/text_primary</item>
         <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        <item name="colorSecondaryContainer">@color/accent_container</item>
+        <item name="colorOnSecondaryContainer">@color/on_accent_container</item>
     </style>
 
     <style name="Theme.EventAdmin" parent="Base.Theme.EventAdmin" />

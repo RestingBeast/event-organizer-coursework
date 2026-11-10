@@ -6,25 +6,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
-    <TextView
-        android:id="@+id/txtTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title"
+    
+    <com.google.android.material.appbar.MaterialToolbar
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar"
+        app:title="@string/title"
+        app:titleTextAppearance="?attr/textAppearanceHeadlineSmall"
+        app:menu="@menu/menu_main"
+        app:contentInsetStart="@dimen/page_padding"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="@dimen/page_padding"
-        android:layout_marginTop="@dimen/space_large"
-        android:textAppearance="?attr/textAppearanceHeadlineMedium"
-        android:textStyle="bold" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/txtEventCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/txtTitle"
-        app:layout_constraintStart_toStartOf="@id/txtTitle"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/page_padding"
         android:layout_marginTop="@dimen/space_extra_small"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="@color/text_secondary" />
@@ -46,7 +47,6 @@
         android:id="@+id/txtEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_event_text"
         android:gravity="center"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:visibility="gone"

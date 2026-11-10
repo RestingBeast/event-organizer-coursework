@@ -176,6 +176,23 @@ class DbHelper(context: Context):
         cursor.close()
         return eventList
     }
+    fun searchEvent(text: String): ArrayList<Event> {
+        val eventList = ArrayList<Event>()
+        val db = this.readableDatabase
+        val query = selectEvent + " WHERE e.${EventEntry.COL_NAME} LIKE ?" +
+                " OR e.${EventEntry.COL_DESC} LIKE ? ORDER BY e.${EventEntry.COL_DATE}"
+        val cursor = db.rawQuery(query, arrayOf(
+            "$text%", "%$text%"
+        ))
+        if (cursor.moveToFirst()) {
+            do {
+                val event = toEvent(cursor)
+                eventList.add(event)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return eventList
+    }
     fun getEventById(id: Long): Event? {
         var event: Event? = null
         val db = this.readableDatabase
