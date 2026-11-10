@@ -29,7 +29,7 @@
     <string name="button_edit_event">Edit event</string>
     <string name="button_delete_event">Delete event</string>
     <!-- Edit Event Form Error -->
-    <string name="delete_error">Failed to delete the event!</string>
+    <string name="delete_event_error">Failed to delete the event!</string>
     <!-- Session Form -->
     <string name="title_new_session">New session</string>
     <string name="hint_session_name">Session name</string>
@@ -45,6 +45,8 @@
     <!-- Edit Session Form -->
     <string name="title_edit_session">Edit session</string>
     <string name="button_delete_session">Delete session</string>
+    <!-- Edit Session Form Error -->
+    <string name="delete_session_error">Failed to delete the session!</string>
     <!-- Singular and Plural -->
     <string name="single_event">event</string>
     <string name="multiple_event">events</string>
@@ -56,9 +58,12 @@
     <string name="duplicate_error">An event with the same name and date exists!</string>
     <string name="session_insert_error">Session Creation Failed!</string>
     <!-- Delete Event Dialog -->
-    <string name="dialog_title">Delete event?</string>
-    <string name="dialog_message">The event and its sessions will be permanently deleted.</string>
+    <string name="delete_event_title">Delete event?</string>
+    <string name="delete_event_message">The event and its sessions will be permanently deleted.</string>
     <string name="dialog_yes">Delete</string>
+    <!-- Delete Session Dialog -->
+    <string name="delete_session_title">Delete session?</string>
+    <string name="delete_session_message">The session will be permanently deleted.</string>
     <!-- Confirm Event Dialog -->
     <string name="confirm_title">Confirm event details</string>
     <string name="confirm_message">Name: %1$s

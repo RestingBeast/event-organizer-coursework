@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.eventadmin.databinding.ActivitySessionFormBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import java.time.LocalTime
@@ -108,6 +109,26 @@ class SessionFormActivity: AppCompatActivity() {
         binding.spinnerType.setSelection(resources.getStringArray(R.array.session_types).indexOf(session.type))
         binding.btnDelete.visibility = VISIBLE
     }
+    private fun deleteSession(id: Long): Boolean {
+        if (dbHelper.deleteSession(id) == 0) {
+            showToast(getString(R.string.delete_session_error), this)
+            return false
+        }
+        return true
+    }
+    private fun showDeleteDialog(id: Long) {
+        val dialog = MaterialAlertDialogBuilder(this)
+        dialog.setTitle(R.string.delete_session_title)
+            .setMessage(R.string.delete_session_message)
+            .setCancelable(false)
+            .setPositiveButton(R.string.dialog_yes) { _,_ ->
+                if (deleteSession(id))
+                    finish()
+            }
+            .setNegativeButton(R.string.back, { _,_ -> })
+        val alert = dialog.create();
+        alert.show()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,7 +159,11 @@ class SessionFormActivity: AppCompatActivity() {
         dbHelper = DbHelper(this)
         eventId = intent.getLongExtra(EXTRA_EVENT_ID, -1L)
         sessionId = intent.getLongExtra(EXTRA_SESSION_ID, -1L)
-        if (sessionId != -1L)
+        if (sessionId != -1L) {
             loadSession(sessionId)
+            binding.btnDelete.setOnClickListener {
+                showDeleteDialog(sessionId)
+            }
+        }
     }
 }

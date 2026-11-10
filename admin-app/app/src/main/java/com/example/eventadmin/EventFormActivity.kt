@@ -153,20 +153,24 @@ class EventFormActivity : AppCompatActivity() {
         )
         showConfirmDialog(event)
     }
-    private fun deleteEvent(eventId: Long) {
-        if (dbHelper.deleteEvent(eventId) == 0)
-            showToast(getString(R.string.delete_error), this)
+    private fun deleteEvent(eventId: Long): Boolean {
+        if (dbHelper.deleteEvent(eventId) == 0) {
+            showToast(getString(R.string.delete_event_error), this)
+            return false
+        }
+        return true
     }
     private fun confirmDelete(eventId: Long) {
         val alertDialog = AlertDialog.Builder(this)
-        alertDialog.setTitle(getString(R.string.dialog_title))
-            .setMessage(getString(R.string.dialog_message))
+        alertDialog.setTitle(getString(R.string.delete_event_title))
+            .setMessage(getString(R.string.delete_event_message))
             .setCancelable(false)
             .setPositiveButton(getString(R.string.dialog_yes)) {
                     dialog,_ ->
-                deleteEvent(eventId)
-                dialog.dismiss()
-                finish()
+                if (deleteEvent(eventId)) {
+                    dialog.dismiss()
+                    finish()
+                }
             }
             .setNegativeButton(getString(android.R.string.cancel)) {
                     dialog,_ ->
