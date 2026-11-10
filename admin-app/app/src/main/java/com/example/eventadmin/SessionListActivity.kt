@@ -19,9 +19,10 @@ const val EXTRA_SESSION_ID = "session_id"
 class SessionListActivity: AppCompatActivity() {
     private lateinit var binding: ActivitySessionListBinding
     private lateinit var dbHelper: DbHelper
-    private var editingId = -1L
-    private fun loadEvent(editingId: Long) {
-        val event = dbHelper.getEventById(editingId)
+    private var eventId = -1L
+    private var searchQuery = ""
+    private fun loadEvent(eventId: Long) {
+        val event = dbHelper.getEventById(eventId)
         event ?: run {
             finish()
             return
@@ -49,7 +50,7 @@ class SessionListActivity: AppCompatActivity() {
             getString(if (event.sessions == 1) R.string.single_session else R.string.multiple_sessions))
     }
     private fun showSessions(id: Long) {
-        val sessions = dbHelper.getSessionsByEvent(id)
+        val sessions = dbHelper.getSessionsByEvent(id, searchQuery)
         val adapter = SessionAdapter(sessions) {
          session ->
          val intent = Intent(this, SessionFormActivity::class.java)
@@ -59,8 +60,13 @@ class SessionListActivity: AppCompatActivity() {
         }
         binding.recyclerSessions.adapter = adapter
         val count = adapter.itemCount
-        if (count == 0)
+        if (count == 0) {
             binding.txtEmpty.visibility = VISIBLE
+            binding.txtEmpty.text = getString(
+                if (searchQuery.isEmpty()) R.string.no_session_text
+                else R.string.no_sessions_result
+            )
+        }
         else
             binding.txtEmpty.visibility = GONE
     }
@@ -86,28 +92,33 @@ class SessionListActivity: AppCompatActivity() {
         }
         dbHelper = DbHelper(this)
         binding.recyclerSessions.layoutManager = LinearLayoutManager(this)
-        editingId = intent.getLongExtra(EXTRA_EVENT_ID, -1L)
-        if (editingId != -1L) {
+        eventId = intent.getLongExtra(EXTRA_EVENT_ID, -1L)
+        if (eventId != -1L) {
 
             binding.btnEditEvent.setOnClickListener {
                 val intent = Intent(this, EventFormActivity::class.java)
-                intent.putExtra(EXTRA_EVENT_ID, editingId)
+                intent.putExtra(EXTRA_EVENT_ID, eventId)
                 startActivity(intent)
             }
         }
-        binding.btnBack.setOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             finish()
         }
         binding.fabAddSession.setOnClickListener {
             val intent = Intent(this, SessionFormActivity::class.java)
-            intent.putExtra(EXTRA_EVENT_ID, editingId)
+            intent.putExtra(EXTRA_EVENT_ID, eventId)
             startActivity(intent)
+        }
+        setUpSearch(binding.toolbar, getString(R.string.search_hint)) {
+            query ->
+            searchQuery = query
+            showSessions(eventId)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        loadEvent(editingId)
-        showSessions(editingId)
+        loadEvent(eventId)
+        showSessions(eventId)
     }
 }

@@ -13,7 +13,7 @@
         android:id="@+id/toolbar"
         app:title="@string/title"
         app:titleTextAppearance="?attr/textAppearanceHeadlineSmall"
-        app:menu="@menu/menu_main"
+        app:menu="@menu/menu_search"
         app:contentInsetStart="@dimen/page_padding"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

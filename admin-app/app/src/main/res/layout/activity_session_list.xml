@@ -4,30 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <ImageButton
-        android:id="@+id/btnBack"
-        android:layout_width="@dimen/btn_back_size"
-        android:layout_height="@dimen/btn_back_size"
-        android:src="@drawable/ic_arrow_back"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/back"
-        android:layout_marginStart="@dimen/space_small"
-        android:layout_marginTop="@dimen/space_small"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:navigationContentDescription="@string/back"
+        app:menu="@menu/menu_search"
+        app:collapseIcon="@drawable/ic_close"
+        app:collapseContentDescription="@string/close_search"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnEditEvent"
-        style="@style/Widget.Material3.Button.OutlinedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_edit_event"
-        android:textColor="@color/accent"
-        app:strokeColor="@color/accent"
-        app:cornerRadius="@dimen/button_corner"
-        android:layout_marginEnd="@dimen/page_padding"
-        app:layout_constraintTop_toTopOf="@id/btnBack"
-        app:layout_constraintBottom_toBottomOf="@id/btnBack"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEditEvent"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_edit_event"
+            android:textColor="@color/accent"
+            app:strokeColor="@color/accent"
+            app:cornerRadius="@dimen/button_corner"
+            android:layout_marginEnd="@dimen/page_padding"
+            android:layout_gravity="end"/>
+    </com.google.android.material.appbar.MaterialToolbar>
+
     <TextView
         android:id="@+id/txtEventName"
         android:layout_width="0dp"
@@ -36,7 +37,7 @@
         android:textStyle="bold"
         android:layout_marginHorizontal="@dimen/page_padding"
         android:layout_marginTop="@dimen/space_small"
-        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
     <TextView
@@ -106,7 +107,6 @@
         android:id="@+id/txtEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_session_text"
         android:gravity="center"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:visibility="gone"

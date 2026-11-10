@@ -256,12 +256,18 @@ class DbHelper(context: Context):
         db.close()
         return result
     }
-    fun getSessionsByEvent(eventId: Long): ArrayList<Session> {
+    fun getSessionsByEvent(eventId: Long, text: String): ArrayList<Session> {
         val db = this.readableDatabase
-        val query = "SELECT * FROM ${SessionEntry.TABLE_NAME} WHERE ${SessionEntry.COL_EVENT_ID} = ? " +
-                "ORDER BY ${SessionEntry.COL_TIME};"
-
-        val cursor = db.rawQuery(query, arrayOf(eventId.toString()))
+        var query = "SELECT * FROM ${SessionEntry.TABLE_NAME} WHERE ${SessionEntry.COL_EVENT_ID} = ?"
+        val args = ArrayList<String>()
+        args.add(eventId.toString())
+        if (text.isNotEmpty()) {
+            query += " AND (${SessionEntry.COL_NAME} LIKE ? OR ${SessionEntry.COL_DESC} LIKE ?)"
+            args.add("$text%")
+            args.add("%$text%")
+        }
+        query += " ORDER BY ${SessionEntry.COL_TIME};"
+        val cursor = db.rawQuery(query, args.toTypedArray())
         val sessionList = ArrayList<Session>()
         if (cursor.moveToFirst()) {
             do {

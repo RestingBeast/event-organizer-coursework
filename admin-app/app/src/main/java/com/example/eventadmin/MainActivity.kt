@@ -148,19 +148,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         binding.recyclerEvents.layoutManager = LinearLayoutManager(this)
-        val searchView = binding.toolbar.menu.findItem(R.id.action_search).actionView as SearchView
-        searchView.queryHint = getString(R.string.search_hint)
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                searchView.clearFocus()
-                return true
-            }
-            override fun onQueryTextChange(newText: String?): Boolean {
-                searchQuery = newText.orEmpty().trim()
-                showEvents()
-                return true
-            }
-        })
+        setUpSearch(binding.toolbar, getString(R.string.search_hint)) {
+            query ->
+            searchQuery = query
+            showEvents()
+        }
+
         binding.chipDate.setOnClickListener {
             binding.chipDate.isChecked = filterStart != null
             showDatePicker()
