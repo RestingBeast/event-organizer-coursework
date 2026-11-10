@@ -25,10 +25,10 @@
         android:src="@drawable/ic_filter"
         app:tint="@color/text_secondary"
         android:contentDescription="@string/filters"
+        android:layout_marginTop="@dimen/filter_margin_top"
         android:layout_marginStart="@dimen/page_padding"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/chipGroupFilters"
-        app:layout_constraintBottom_toBottomOf="@id/chipGroupFilters"
         />
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipGroupFilters"
@@ -45,6 +45,12 @@
             android:layout_height="wrap_content"
             style="@style/Widget.Material3.Chip.Filter"
             android:text="@string/chip_date"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipOrganizer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:text="@string/chip_organizer"/>
     </com.google.android.material.chip.ChipGroup>
 
     <TextView

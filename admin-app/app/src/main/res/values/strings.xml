@@ -112,4 +112,6 @@
     <string name="chip_date">Any date</string>
     <string name="select_date">Select date</string>
     <string name="filters">Filters</string>
+    <string name="chip_organizer">Any organizer</string>
+    <string name="no_organizers">No organizers yet</string>
 </resources>

@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View.VISIBLE
 import android.view.View.GONE
+import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private var searchQuery: String = ""
     private var filterStart: LocalDate? = null
     private var filterEnd: LocalDate? = null
+    private var filterOrganizer: String? = null
     private fun showDatePicker() {
         val picker = MaterialDatePicker.Builder.dateRangePicker()
             .setTitleText(R.string.select_date)
@@ -64,8 +66,35 @@ class MainActivity : AppCompatActivity() {
             binding.chipDate.isCloseIconVisible = true
         }
     }
+    private fun showOrganizersMenu() {
+        val organizers = dbHelper.getOrganizers()
+        if (organizers.isEmpty()) {
+            showToast(getString(R.string.no_organizers), this)
+            return
+        }
+        val popup = PopupMenu(this, binding.chipOrganizer)
+        organizers.forEach { name -> popup.menu.add(name)}
+        popup.setOnMenuItemClickListener {
+            item ->
+            filterOrganizer = item.title.toString()
+            showEvents()
+            true
+        }
+        popup.show()
+    }
+    private fun updateOrganizerChip() {
+        if (filterOrganizer == null) {
+            binding.chipOrganizer.text = getString(R.string.chip_organizer)
+            binding.chipOrganizer.isChecked = false
+            binding.chipOrganizer.isCloseIconVisible = false
+        } else {
+            binding.chipOrganizer.text = filterOrganizer
+            binding.chipOrganizer.isChecked = true
+            binding.chipOrganizer.isCloseIconVisible = true
+        }
+    }
     private fun showEvents() {
-        val events = dbHelper.searchEvents(searchQuery, filterStart, filterEnd, null)
+        val events = dbHelper.searchEvents(searchQuery, filterStart, filterEnd, filterOrganizer)
         val adapter = EventAdapter(events) {
             event ->
             val intent = Intent(this, SessionListActivity::class.java)
@@ -85,13 +114,14 @@ class MainActivity : AppCompatActivity() {
         if (count == 0) {
             binding.txtEmpty.visibility = VISIBLE
             binding.txtEmpty.text = getString(
-                if (searchQuery.isEmpty() && filterStart == null)
+                if (searchQuery.isEmpty() && filterStart == null && filterOrganizer == null)
                     R.string.no_event_text else R.string.no_search_result)
         }
         else {
             binding.txtEmpty.visibility = GONE
         }
         updateDateChip()
+        updateOrganizerChip()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,6 +168,14 @@ class MainActivity : AppCompatActivity() {
         binding.chipDate.setOnCloseIconClickListener {
             filterStart = null
             filterEnd = null
+            showEvents()
+        }
+        binding.chipOrganizer.setOnClickListener {
+            binding.chipOrganizer.isChecked = filterOrganizer != null
+            showOrganizersMenu()
+        }
+        binding.chipOrganizer.setOnCloseIconClickListener {
+            filterOrganizer = null
             showEvents()
         }
     }

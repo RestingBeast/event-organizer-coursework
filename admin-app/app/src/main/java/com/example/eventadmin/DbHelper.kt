@@ -310,6 +310,22 @@ class DbHelper(context: Context):
         db.close()
         return result
     }
+    fun getOrganizers(): ArrayList<String> {
+        val db = this.readableDatabase
+        val query = "SELECT DISTINCT ${EventEntry.COL_ORGANIZER} FROM ${EventEntry.TABLE_NAME}" +
+                " WHERE ${EventEntry.COL_ORGANIZER} IS NOT NULL ORDER BY ${EventEntry.COL_ORGANIZER}" +
+                " COLLATE NOCASE"
+        val cursor = db.rawQuery(query, null)
+        val organizers = ArrayList<String>()
+        if (cursor.moveToFirst()) {
+            do {
+                organizers.add(cursor.getString(
+                    cursor.getColumnIndexOrThrow(EventEntry.COL_ORGANIZER)))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return organizers
+    }
     companion object {
         private const val DB_NAME = "events.db"
         private const val DB_VERSION = 1
