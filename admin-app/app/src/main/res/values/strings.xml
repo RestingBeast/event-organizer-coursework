@@ -34,7 +34,7 @@
     <string name="title_new_session">New session</string>
     <string name="hint_session_name">Session name</string>
     <string name="hint_time">Time</string>
-    <string name="select_time">Select Time</string>
+    <string name="select_time">Select time</string>
     <string name="hint_speaker">Speaker</string>
     <string name="hint_room">Room</string>
     <string name="label_session_type">Session Type</string>
@@ -54,10 +54,10 @@
     <string name="single_session">session</string>
     <string name="multiple_sessions">sessions</string>
     <!-- DB Error -->
-    <string name="event_insert_error">Event Creation Failed!</string>
+    <string name="event_insert_error">Failed to create the event!</string>
     <string name="event_update_error">Failed to update the event!</string>
     <string name="duplicate_error">An event with the same name and date exists!</string>
-    <string name="session_insert_error">Session Creation Failed!</string>
+    <string name="session_insert_error">Failed to create the session!</string>
     <!-- Delete Event Dialog -->
     <string name="delete_event_title">Delete event?</string>
     <string name="delete_event_message">The event and its sessions will be permanently deleted.</string>
@@ -114,7 +114,7 @@
     <string name="filters">Filters</string>
     <string name="chip_organizer">Any organizer</string>
     <string name="no_organizers">No organizers yet</string>
-    <string name="no_sessions_result">No matching sessions</string>
+    <string name="no_sessions_result">No matching sessions.</string>
     <string name="close_search">Close search</string>
     <!-- Upload -->
     <string name="upload">Upload</string>

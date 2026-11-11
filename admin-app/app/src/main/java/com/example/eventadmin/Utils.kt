@@ -1,10 +1,7 @@
 package com.example.eventadmin
 
-import android.Manifest
 import android.content.Context
-import android.net.ConnectivityManager
 import android.widget.Toast
-import androidx.annotation.RequiresPermission
 import androidx.appcompat.widget.SearchView
 import com.google.android.material.appbar.MaterialToolbar
 

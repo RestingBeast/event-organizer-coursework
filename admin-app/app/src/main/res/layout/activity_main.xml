@@ -14,6 +14,8 @@
         app:title="@string/title"
         app:titleTextAppearance="?attr/textAppearanceHeadlineSmall"
         app:menu="@menu/menu_search"
+        app:collapseIcon="@drawable/ic_close"
+        app:collapseContentDescription="@string/close_search"
         app:contentInsetStart="@dimen/page_padding"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
