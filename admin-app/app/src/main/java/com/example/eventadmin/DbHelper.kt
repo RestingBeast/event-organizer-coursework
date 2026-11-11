@@ -13,7 +13,7 @@ import com.example.eventadmin.DbContract.EventEntry
 import com.example.eventadmin.DbContract.SessionEntry
 import java.time.LocalTime
 
-class DbHelper(context: Context):
+class DbHelper(private val context: Context):
         SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
     private val selectEvent = """
         |SELECT *,
@@ -231,6 +231,10 @@ class DbHelper(context: Context):
         val values = eventToContentValues(event)
         val result = db.insert(EventEntry.TABLE_NAME, null, values)
         db.close()
+        if (result != -1L) {
+            markSyncPending(context)
+            requestSync(context)
+        }
         return result
     }
     fun updateEvent(id: Long, event: Event): Int {
@@ -245,6 +249,10 @@ class DbHelper(context: Context):
             arrayOf(id.toString())
         )
         db.close()
+        if (result > 0) {
+            markSyncPending(context)
+            requestSync(context)
+        }
         return result
     }
     fun deleteEvent(id: Long): Int {
@@ -254,7 +262,25 @@ class DbHelper(context: Context):
             "${BaseColumns._ID} = ?",
             arrayOf(id.toString()))
         db.close()
+        if (result > 0) {
+            markSyncPending(context)
+            requestSync(context)
+        }
         return result
+    }
+    fun getAllSessions(): ArrayList<Session> {
+        val db = this.readableDatabase
+        val query = "SELECT * FROM ${SessionEntry.TABLE_NAME} ORDER BY ${SessionEntry.COL_TIME}"
+        val cursor = db.rawQuery(query, null)
+        val sessionList = ArrayList<Session>()
+        if (cursor.moveToFirst()) {
+            do {
+                val session = toSession(cursor)
+                sessionList.add(session)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return sessionList
     }
     fun getSessionsByEvent(eventId: Long, text: String): ArrayList<Session> {
         val db = this.readableDatabase
@@ -293,6 +319,10 @@ class DbHelper(context: Context):
         val values = sessionToContentValues(session)
         val result = db.insert(SessionEntry.TABLE_NAME, null, values)
         db.close()
+        if (result != -1L) {
+            markSyncPending(context)
+            requestSync(context)
+        }
         return result
     }
     fun updateSession(id: Long, session: Session): Int {
@@ -305,6 +335,10 @@ class DbHelper(context: Context):
             arrayOf(id.toString())
         )
         db.close()
+        if (result > 0) {
+            markSyncPending(context)
+            requestSync(context)
+        }
         return result
     }
     fun deleteSession(id: Long): Int {
@@ -314,6 +348,10 @@ class DbHelper(context: Context):
             "${BaseColumns._ID} = ?",
             arrayOf(id.toString()))
         db.close()
+        if (result > 0) {
+            markSyncPending(context)
+            requestSync(context)
+        }
         return result
     }
     fun getOrganizers(): ArrayList<String> {

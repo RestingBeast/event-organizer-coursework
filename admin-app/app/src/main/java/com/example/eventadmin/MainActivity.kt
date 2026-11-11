@@ -3,19 +3,22 @@ package com.example.eventadmin
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View.VISIBLE
 import android.view.View.GONE
 import androidx.appcompat.widget.PopupMenu
-import androidx.appcompat.widget.SearchView
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.eventadmin.databinding.ActivityMainBinding
 import com.google.android.material.datepicker.MaterialDatePicker
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -28,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private var filterStart: LocalDate? = null
     private var filterEnd: LocalDate? = null
     private var filterOrganizer: String? = null
+    private var isOnline = false
     private fun showDatePicker() {
         val picker = MaterialDatePicker.Builder.dateRangePicker()
             .setTitleText(R.string.select_date)
@@ -123,6 +127,29 @@ class MainActivity : AppCompatActivity() {
         updateDateChip()
         updateOrganizerChip()
     }
+    private fun uploadEvents(item: MenuItem) {
+        if (!isOnline) {
+            showToast(getString(R.string.no_connection), this)
+            return
+        }
+        if (isUploading)
+            return
+        item.isEnabled = false
+        isUploading = true
+        clearSyncPending(this)
+        lifecycleScope.launch {
+            val success = uploadAll(dbHelper)
+            if (success)
+                showToast(getString(R.string.upload_success), this@MainActivity)
+            else {
+                showToast(getString(R.string.upload_failed), this@MainActivity)
+                markSyncPending(this@MainActivity)
+            }
+            item.isEnabled = true
+            isUploading = false
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
@@ -170,6 +197,22 @@ class MainActivity : AppCompatActivity() {
         binding.chipOrganizer.setOnCloseIconClickListener {
             filterOrganizer = null
             showEvents()
+        }
+        NetworkConnectionHelper(this).distinctUntilChanged().observe(this) {
+            online ->
+            isOnline = online
+            if (isOnline)
+                requestSync(this)
+        }
+        binding.toolbar.inflateMenu(R.menu.menu_upload)
+        binding.toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_upload -> {
+                    uploadEvents(item)
+                    true
+                }
+                else -> false
+            }
         }
     }
 

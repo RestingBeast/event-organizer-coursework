@@ -116,4 +116,9 @@
     <string name="no_organizers">No organizers yet</string>
     <string name="no_sessions_result">No matching sessions</string>
     <string name="close_search">Close search</string>
+    <!-- Upload -->
+    <string name="upload">Upload</string>
+    <string name="upload_success">All events uploaded</string>
+    <string name="upload_failed">Upload failed. Please try again.</string>
+    <string name="no_connection">No internet connection</string>
 </resources>
