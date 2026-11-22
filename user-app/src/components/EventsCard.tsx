@@ -57,17 +57,31 @@ export default function EventCard({ event, onPress }: Props) {
           </Text>
 
           <View style={styles.pills}>
-            <Text style={[styles.pill, { borderColor: COLORS.accent, color: COLORS.accent }]}>
+            <Text
+              style={[
+                styles.pill,
+                { borderColor: COLORS.accent, color: COLORS.accent },
+              ]}
+            >
               {event.type}
             </Text>
-            <Text style={[styles.pill, { borderColor: statusColor, color: statusColor }]}>
+            <Text
+              style={[
+                styles.pill,
+                { borderColor: statusColor, color: statusColor },
+              ]}
+            >
               {event.status}
             </Text>
           </View>
 
           {sessionCount > 0 && (
             <View style={styles.sessions}>
-              <MaterialCommunityIcons name="clock-outline" size={14} color={COLORS.textSecondary} />
+              <MaterialCommunityIcons
+                name="clock-outline"
+                size={14}
+                color={COLORS.textSecondary}
+              />
               <Text style={styles.secondary}>
                 {sessionCount} {sessionCount === 1 ? "session" : "sessions"}
               </Text>
@@ -93,7 +107,11 @@ export default function EventCard({ event, onPress }: Props) {
       <View style={styles.divider} />
 
       <View style={styles.footer}>
-        <MaterialCommunityIcons name="map-marker-outline" size={16} color={COLORS.textSecondary} />
+        <MaterialCommunityIcons
+          name="map-marker-outline"
+          size={16}
+          color={COLORS.textSecondary}
+        />
         <Text style={[styles.secondary, styles.location]} numberOfLines={1}>
           {event.location}
         </Text>
@@ -109,7 +127,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 16,
     marginBottom: 12,
-    overflow: "hidden", // keeps the Android ripple inside the rounded corners
+    overflow: "hidden",
   },
   pressed: { opacity: 0.85 },
   top: {
