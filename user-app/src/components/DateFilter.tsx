@@ -21,12 +21,14 @@ export default function DateFilter({ date, setDate }: Props) {
   }
   return (
     <View style={styles.row}>
-      <Pressable onPress={openPicker}>
+      <Pressable
+        onPress={openPicker}
+        style={[styles.chip, date && styles.chipActive]}
+      >
         <MaterialCommunityIcons
           name="calendar"
           size={18}
           color={date ? "#2F6F6A" : "#75614F"}
-          style={[styles.chip, date && styles.chipActive]}
         />
         <Text style={[styles.label, date && styles.labelActive]}>
           {date ? formatDate(date) : "Any date"}
