@@ -20,7 +20,7 @@ export default function TabsLayout() {
           title: "Events",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
-              name="calendar"
+              name="ticket-outline"
               color={color as string}
               size={size}
             />

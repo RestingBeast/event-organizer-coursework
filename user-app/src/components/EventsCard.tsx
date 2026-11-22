@@ -4,7 +4,6 @@ import type { Event } from "@/types";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-// Colours from the admin app's colors.xml
 const COLORS = {
   surface: "#FFFFFF",
   background: "#FFF1E6",
@@ -29,7 +28,6 @@ export default function EventCard({ event, onPress }: Props) {
   const { isFavourite, toggle, loaded } = useFavourites();
   const fav = isFavourite(event.id);
 
-  // "2026-10-19" → day "19", month "Oct"
   const [, month, day] = event.date.split("-");
   const monthLabel = MONTHS[Number(month) - 1] ?? "";
 
