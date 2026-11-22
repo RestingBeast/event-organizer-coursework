@@ -1,51 +1,31 @@
+import DateFilter from "@/components/DateFilter";
 import EventCard from "@/components/EventsCard";
+import SearchBox from "@/components/SearchBox";
 import { useEvents } from "@/context/EventsContext";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { toYMD } from "@/lib/dates";
 import { router } from "expo-router";
 import { useState } from "react";
-import {
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function Index() {
   const { events, loading, error, reload } = useEvents();
   const [query, setQuery] = useState("");
+  const [date, setDate] = useState<Date | null>(null);
 
+  const dateYMD = date ? toYMD(date) : null;
   const q = query.trim().toLowerCase();
-  const filtered = q
-    ? events.filter((e) => e.name.toLowerCase().includes(q))
-    : events;
+  const filtered = events.filter(
+    (e) =>
+      (!q || e.name.toLowerCase().includes(q)) &&
+      (!dateYMD || e.date === dateYMD),
+  );
+
   return (
     <View style={styles.container}>
-      <View style={styles.searchBox}>
-        <MaterialCommunityIcons name="magnify" size={20} color="#75614F" />
-        <TextInput
-          style={styles.searchInput}
-          value={query}
-          onChangeText={setQuery}
-          placeholder="Search events by name"
-          placeholderTextColor="#75614F"
-          autoCorrect={false}
-          autoCapitalize="none"
-          returnKeyType="search"
-        />
-        {query.length > 0 && (
-          <Pressable onPress={() => setQuery("")} hitSlop={8}>
-            <MaterialCommunityIcons
-              name="close-circle"
-              size={18}
-              color="#75614F"
-            />
-          </Pressable>
-        )}
-      </View>
-      {loading ? (
-        <Text>"Loading..."</Text>
+      <SearchBox query={query} setQuery={setQuery} />
+      <DateFilter date={date} setDate={setDate} />
+      {loading && events.length === 0 ? (
+        <Text>Loading...</Text>
       ) : (
         <FlatList
           data={filtered}
@@ -66,32 +46,24 @@ export default function Index() {
           }
           ListEmptyComponent={
             <Text>
-              {q
+              {q || date
                 ? `No events match "${query.trim()}"`
                 : "No events available yet."}
             </Text>
           }
         />
       )}
+      {error && events.length === 0 && (
+        <>
+          <Text>{error}</Text>
+          <Pressable onPress={reload}>Retry</Pressable>
+        </>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  searchBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E2CBB8",
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    marginHorizontal: 20,
-    marginTop: 12,
-    height: 48,
-  },
-  searchInput: { flex: 1, fontSize: 15, color: "#2B211B" },
   container: {
     flex: 1,
   },
