@@ -25,7 +25,14 @@ export default function Index() {
       <SearchBox query={query} setQuery={setQuery} />
       <DateFilter date={date} setDate={setDate} />
       {loading && events.length === 0 ? (
-        <Text>Loading...</Text>
+        <Text style={styles.message}>Loading...</Text>
+      ) : error && events.length === 0 ? (
+        <View style={styles.center}>
+          <Text style={styles.message}>{error}</Text>
+          <Pressable onPress={reload}>
+            <Text style={styles.retry}>Retry</Text>
+          </Pressable>
+        </View>
       ) : (
         <FlatList
           data={filtered}
@@ -46,18 +53,14 @@ export default function Index() {
           }
           ListEmptyComponent={
             <Text>
-              {q || date
+              {q
                 ? `No events match "${query.trim()}"`
-                : "No events available yet."}
+                : date
+                  ? "No events on this date."
+                  : "No events available yet."}
             </Text>
           }
         />
-      )}
-      {error && events.length === 0 && (
-        <>
-          <Text>{error}</Text>
-          <Pressable onPress={reload}>Retry</Pressable>
-        </>
       )}
     </View>
   );
@@ -67,4 +70,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  center: { flex: 1, alignItems: "center", justifyContent: "center", gap: 12 },
+  message: { color: "#75614F", textAlign: "center", padding: 20 },
+  retry: { color: "#2F6F6A", fontWeight: "600", fontSize: 16 },
 });
