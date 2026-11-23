@@ -91,43 +91,35 @@
                         android:paddingVertical="@dimen/pill_padding_vertical"
                         android:textAppearance="?attr/textAppearanceLabelSmall" />
                 </LinearLayout>
+                <TextView
+                    android:id="@+id/txtSessionCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/space_extra_small"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="@dimen/space_extra_small"
+                    app:drawableStartCompat="@drawable/ic_schedule_small"
+                    app:drawableTint="@color/text_secondary" />
             </LinearLayout>
         </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/outline" />
-        <LinearLayout
+        <TextView
+            android:id="@+id/txtEventLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:drawablePadding="@dimen/space_small"
             android:gravity="center_vertical"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="@color/text_secondary"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:paddingHorizontal="@dimen/space_medium"
-            android:paddingVertical="@dimen/footer_padding_vertical">
-            <TextView
-                android:id="@+id/txtEventLocation"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:drawablePadding="@dimen/space_small"
-                android:gravity="center_vertical"
-                android:textAppearance="?attr/textAppearanceBodySmall"
-                android:textColor="@color/text_secondary"
-                android:maxLines="1"
-                android:ellipsize="end"
-                app:drawableStartCompat="@drawable/ic_location_small"
-                app:drawableTint="@color/text_secondary" />
-            <TextView
-                android:id="@+id/txtSessionCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_medium"
-                android:drawablePadding="@dimen/space_extra_small"
-                android:gravity="center_vertical"
-                android:textAppearance="?attr/textAppearanceBodySmall"
-                android:textColor="@color/text_secondary"
-                app:drawableStartCompat="@drawable/ic_schedule_small"
-                app:drawableTint="@color/text_secondary" />
-        </LinearLayout>
+            android:paddingVertical="@dimen/footer_padding_vertical"
+            app:drawableStartCompat="@drawable/ic_location_small"
+            app:drawableTint="@color/text_secondary" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
