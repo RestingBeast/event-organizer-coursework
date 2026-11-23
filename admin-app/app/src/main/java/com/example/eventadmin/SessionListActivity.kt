@@ -46,8 +46,6 @@ class SessionListActivity: AppCompatActivity() {
         }
         else
             binding.txtEventDesc.visibility = GONE
-        binding.txtSessionCount.text = getString(R.string.item_count, event.sessions,
-            getString(if (event.sessions == 1) R.string.single_session else R.string.multiple_sessions))
     }
     private fun showSessions(id: Long) {
         val sessions = dbHelper.getSessionsByEvent(id, searchQuery)
@@ -60,6 +58,8 @@ class SessionListActivity: AppCompatActivity() {
         }
         binding.recyclerSessions.adapter = adapter
         val count = adapter.itemCount
+        binding.txtSessionCount.text = getString(R.string.item_count, count,
+            getString(if (count == 1) R.string.single_session else R.string.multiple_sessions))
         if (count == 0) {
             binding.txtEmpty.visibility = VISIBLE
             binding.txtEmpty.text = getString(
