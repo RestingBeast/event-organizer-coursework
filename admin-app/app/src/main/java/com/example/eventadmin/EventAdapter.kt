@@ -30,10 +30,10 @@ class EventAdapter(
         holder.binding.txtMonth.text = event.date.format(DateTimeFormatter.ofPattern("MMM"))
         holder.binding.txtEventType.text = event.type
         holder.binding.txtEventMeta.text = context.getString(
-            R.string.meta_string,
-            event.location,
+            R.string.organizer_by,
             event.organizer
         )
+        holder.binding.txtEventLocation.text = event.location
         holder.binding.root.setOnClickListener {
             onClick(event)
         }
@@ -66,11 +66,12 @@ class EventAdapter(
                 txtStatus.setBackgroundResource(R.drawable.bg_status_completed)
             }
         }
-        holder.binding.txtSessionCount.text = event.sessions.toString()
-        holder.binding.txtSessionLabel.text = when (event.sessions) {
-            1 -> context.getString(R.string.single_session)
-            else -> context.getString(R.string.multiple_sessions)
-        }
+        holder.binding.txtSessionCount.text = context.getString(R.string.item_count,
+            event.sessions,
+             when (event.sessions) {
+                1 -> context.getString(R.string.single_session)
+                else -> context.getString(R.string.multiple_sessions)
+            })
 
     }
     override fun getItemCount(): Int = events.size

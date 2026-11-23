@@ -84,6 +84,7 @@
     <string name="item_count">%1$d %2$s</string>
     <string name="meta_string">%1$s · %2$s</string>
     <string name="info_string">%1$s · %2$s · %3$s</string>
+    <string name="organizer_by">by %1$s</string>
     <!-- String Arrays -->
     <string-array name="event_statuses">
         <item>Upcoming</item>
